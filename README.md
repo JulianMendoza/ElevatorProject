@@ -1,11 +1,15 @@
-# Elevator System for SYSC 3303
+# SYSC 3303 - Elevator System 
 
-Authors:
+Authors: Oluwafunbi Aboderin, Mohammad Gaffori, Kelly Harrison, Julian Mendoza, Giuseppe Papalia
 
 **Installation**
-***TODO**
+
+instructions go here
 
 **Iteration 0**
+
 data goes here
+
 **Iteration 1**
-Diagrams go here
+
+diagrams go here
