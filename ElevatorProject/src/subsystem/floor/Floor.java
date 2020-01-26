@@ -1,4 +1,4 @@
-package FloorSubSystem;
+package subsystem.floor;
 
 public class Floor implements Runnable{
 	private int floorNumber;
