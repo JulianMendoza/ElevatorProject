@@ -1,6 +1,7 @@
+package main;
 /**
  * TODO Create the system
- * @author Julian
+ * 
  *
  */
 public class Start {
