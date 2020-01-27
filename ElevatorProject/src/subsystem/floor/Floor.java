@@ -18,8 +18,8 @@ public class Floor implements Runnable {
 	}
 
 	private void listen() {
-		//if something signal
 		signal();
+		
 	}
 
 	private void signal() {

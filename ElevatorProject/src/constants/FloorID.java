@@ -16,4 +16,8 @@ public class FloorID {
 	
 	public static final int SEVEN =7;
 	
+	public static final int MAXFLOOR =SEVEN;
+	
+	public static final int MINFLOOR =ONE;
+	
 }
