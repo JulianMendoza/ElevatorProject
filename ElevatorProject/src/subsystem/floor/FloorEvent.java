@@ -24,14 +24,14 @@ public class FloorEvent {
 	}
 	
 	private void parse(String floorEvent) throws ParseException {
-		String[] commaSplit = floorEvent.split(",");
-		if(commaSplit.length == 4) {
-			time = new Time(commaSplit[0]);
-			button = ElevatorButton.parse(commaSplit[2]);
+		String[] spaceSplit = floorEvent.split(" ");
+		if(spaceSplit.length == 4) {
+			time = new Time(spaceSplit[0]);
+			button = ElevatorButton.parse(spaceSplit[2]);
 			
 			try {
-				floor = Integer.parseInt(commaSplit[1]);
-				carID = Integer.parseInt(commaSplit[3]);
+				floor = Integer.parseInt(spaceSplit[1]);
+				carID = Integer.parseInt(spaceSplit[3]);
 			} catch(NumberFormatException e) {
 				throw new ParseException("Invalid floor event", 0);
 			}

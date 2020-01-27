@@ -9,13 +9,15 @@ public class RandomEventGenerator {
 	private RandomFloorEvent randomEvent;
 	private static final Random RANDOM = new Random();
 	
-	public RandomEventGenerator(int numEvents) {
+	public RandomEventGenerator(int numEvents,int min,int max) {
 		this.numEvents=numEvents;
+		this.minWaitTime=min;
+		this.maxWaitTime=max;
 	}
 	public void generateEvent() {
 		for(int i=0;i<numEvents;i++) {
 			randomEvent=new RandomFloorEvent();
-			//do something with the generated event
+			Parser.deparse("event"+i+".txt",randomEvent.toString());
 			Sleeper.sleep(RANDOM.nextInt((maxWaitTime-minWaitTime)+1)+minWaitTime);
 		}
 	}

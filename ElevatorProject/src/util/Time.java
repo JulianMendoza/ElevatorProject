@@ -17,7 +17,8 @@ public class Time {
 		
 		String[] colonSplit = time.split(":");
 		if(colonSplit.length == 3) {
-			String[] periodSplit = colonSplit[2].split(".");
+	
+			String[] periodSplit = colonSplit[2].split("\\.");
 			if(periodSplit.length == 2) {
 				try {
 					hours = Integer.parseInt(colonSplit[0]);

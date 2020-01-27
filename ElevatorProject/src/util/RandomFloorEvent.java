@@ -13,9 +13,7 @@ public class RandomFloorEvent {
 	private static final Random RANDOM = new Random();
 
 	public RandomFloorEvent() {
-
 		time = java.time.LocalTime.now().toString();
-
 		floor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		do {
 			carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
@@ -41,5 +39,9 @@ public class RandomFloorEvent {
 
 	public int getElevatorCarID() {
 		return carID;
+	}
+	@Override
+	public String toString() {
+		return time+" "+floor+" "+button+" "+carID;
 	}
 }
