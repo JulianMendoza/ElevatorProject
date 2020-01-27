@@ -9,8 +9,12 @@ public class Elevator implements Runnable{
 	}
 	@Override
 	public void run() {
-		
-		
+		if(pipe.isPromptElevator()) {
+			handleElevatorEvent();
+		}
+	}
+	private void handleElevatorEvent() {
+		//do something
 	}
 
 }

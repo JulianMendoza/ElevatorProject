@@ -13,11 +13,16 @@ public class Floor implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
+			if(pipe.isPromptFloor()) {
+				handleSchedulerEvent();
+			}
 			listen();
 			Sleeper.sleep(SleepTime.DEFAULT);
 		}
 	}
-
+	private void handleSchedulerEvent() {
+		//do something
+	}
 	private void listen() {
 		//if event occurs signal
 		signal();
