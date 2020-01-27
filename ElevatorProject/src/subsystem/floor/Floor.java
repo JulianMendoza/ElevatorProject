@@ -1,12 +1,13 @@
 package subsystem.floor;
 
 import constants.SleepTime;
+import subsystem.CommunicationPipe;
 import util.Sleeper;
 
 public class Floor implements Runnable {
-	
-	public Floor() {
-	
+	private CommunicationPipe pipe;
+	public Floor(CommunicationPipe pipe) {
+		this.pipe=pipe;
 	}
 
 	@Override
@@ -18,7 +19,7 @@ public class Floor implements Runnable {
 	}
 
 	private void listen() {
-		
+		//if event occurs signal
 		signal();
 	}
 
