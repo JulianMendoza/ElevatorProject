@@ -13,14 +13,14 @@ public class Start {
 	public static void main(String[] args) {
 		CommunicationPipe pipe=new CommunicationPipe();
 		EventFile eventFile=new EventFile();
-		RandomFloorEvent rnf=new RandomFloorEvent(eventFile);
-		//RandomEventGenerator rng=new RandomEventGenerator(4,500,1000,rnf);
+		RandomFloorEvent rnf=new RandomFloorEvent();
+		RandomEventGenerator rng=new RandomEventGenerator(1,500,1000,rnf);
 		Thread floorSubSystem = new Thread(new Floor(pipe,eventFile),"FloorSubSystem");
 		Thread elevatorSubSystem = new Thread(new Elevator(pipe),"ElevatorSubSystem");
 		Thread schedulerSubSystem = new Thread(new Scheduler(pipe),"SchedulerSubSystem");
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-		//rng.generateEvent();
+		rng.generateEvent();
 	}
 }

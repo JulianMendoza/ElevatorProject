@@ -16,7 +16,6 @@ public class RandomEventGenerator {
 		this.generator=generator;
 	}
 	public void generateEvent() {
-		System.out.println(numEvents);
 		for(int i=0;i<numEvents;i++) {
 			generator.createNewEvent();
 			Sleeper.sleep(RANDOM.nextInt((maxWaitTime-minWaitTime)+1)+minWaitTime);
