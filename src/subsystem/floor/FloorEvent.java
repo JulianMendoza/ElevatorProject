@@ -58,4 +58,8 @@ public class FloorEvent {
 	public int getElevatorCarID() {
 		return carID;
 	}
+	@Override
+	public String toString() {
+		return time.toString()+" "+floor+" "+button+" "+carID;
+	}
 }

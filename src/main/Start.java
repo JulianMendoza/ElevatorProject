@@ -2,9 +2,11 @@ package main;
 
 import subsystem.CommunicationPipe;
 import subsystem.elevator.Elevator;
+import subsystem.floor.EventFile;
 import subsystem.floor.Floor;
 import subsystem.scheduler.Scheduler;
 import util.RandomEventGenerator;
+import util.RandomFloorEvent;
 
 /**
  * TODO Create the system
@@ -13,14 +15,16 @@ import util.RandomEventGenerator;
  */
 public class Start {
 	public static void main(String[] args) {
-		//RandomEventGenerator rng=new RandomEventGenerator(10,500,1500);
-		//rng.generateEvent();
 		CommunicationPipe pipe=new CommunicationPipe();
-		Thread floorSubSystem = new Thread(new Floor(pipe),"FloorSubSystem");
+		EventFile eventFile=new EventFile();
+		RandomFloorEvent rnf=new RandomFloorEvent(eventFile);
+		//RandomEventGenerator rng=new RandomEventGenerator(1,5000,10000,rnf);
+		Thread floorSubSystem = new Thread(new Floor(pipe,eventFile),"FloorSubSystem");
 		Thread elevatorSubSystem = new Thread(new Elevator(pipe),"ElevatorSubSystem");
 		Thread schedulerSubSystem = new Thread(new Scheduler(pipe),"SchedulerSubSystem");
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
+		//rng.generateEvent();
 	}
 }

@@ -19,9 +19,8 @@ import subsystem.floor.FloorEvent;
  *
  */
 public class Parser {
-	public static FloorEvent readTextFile(String fileName){
+	public static FloorEvent readTextFile(String fileName,File file){
 		FloorEvent event = null;
-		File file = new File(fileName);
 		try {
 			BufferedReader br = new BufferedReader (new FileReader(file));
 			String str;
@@ -39,7 +38,7 @@ public class Parser {
 	}
 	public static void deparse(String fileName,String event) {
 		String cwd=new File("").getAbsolutePath();
-		cwd+="/testfolder/"+fileName;
+		cwd+=fileName;
 		FileWriter writer=null;
 		try {
 			writer = new FileWriter(cwd);

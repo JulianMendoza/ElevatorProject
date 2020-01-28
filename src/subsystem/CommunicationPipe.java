@@ -24,7 +24,7 @@ public class CommunicationPipe {
 	 * Communication between scheduler to floor
 	 */
 	public synchronized void schedulerToFloor() {
-		System.out.println("Floor has received the signal");
+		promptFloor=true;
 		notifyAll();
 	}
 	/**
@@ -62,5 +62,8 @@ public class CommunicationPipe {
 	}
 	public void setElevatorEventNotifcation(boolean receivedEvent) {
 		elevatorEventNotification=receivedEvent;
+	}
+	public void setFloorPrompt(boolean receivedEvent) {
+		promptFloor=receivedEvent;
 	}
 }

@@ -19,5 +19,5 @@ public class FloorID {
 	public static final int MAXFLOOR =SEVEN;
 	
 	public static final int MINFLOOR =ONE;
-	
+	public static final String EVENTFILE="/testfolder/eventFile.txt";
 }
