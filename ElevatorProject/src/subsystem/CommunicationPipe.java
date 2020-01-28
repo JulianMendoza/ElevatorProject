@@ -11,33 +11,36 @@ public class CommunicationPipe {
 		elevatorEventNotification=false;
 		promptElevator=false;
 	}
-	public synchronized void addToQueue() {
-		
-	}
 	/**
 	 *  Communication from floor to scheduler
 	 * @param e
 	 */
 	public synchronized void processFloorEvent(FloorEvent e) {
 		event=e;
+		floorEventNotifcation=true;
+		notifyAll();
 	}
 	/**
 	 * Communication between scheduler to floor
 	 */
 	public synchronized void schedulerToFloor() {
-		//do stuff
+		System.out.println("Floor has received the signal");
+		notifyAll();
 	}
 	/**
 	 * Communication from scheduler to elevator
 	 */
-	public synchronized void processElevatorEvent() {
-		//do stuff
+	public synchronized void sendToElevator() {
+		floorEventNotifcation=false;
+		promptElevator=true;
+		notifyAll();
 	}
 	/**
 	 * Communication from elevator to scheduler
 	 */
 	public synchronized void elevatorToFloor() {
-		//do stuff
+		elevatorEventNotification=true;
+		notifyAll();
 	}
 	public boolean isFloorEventNotifcation() {
 		return floorEventNotifcation;
@@ -53,5 +56,11 @@ public class CommunicationPipe {
 	}
 	public FloorEvent getFloorEvent() {
 		return event;
+	}
+	public void setElevatorPrompt(boolean receivedEvent) {
+		promptElevator=receivedEvent;
+	}
+	public void setElevatorEventNotifcation(boolean receivedEvent) {
+		elevatorEventNotification=receivedEvent;
 	}
 }

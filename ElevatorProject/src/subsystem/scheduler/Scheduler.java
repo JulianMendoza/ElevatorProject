@@ -2,6 +2,7 @@ package subsystem.scheduler;
 
 import subsystem.CommunicationPipe;
 import subsystem.floor.FloorEvent;
+import util.Sleeper;
 
 public class Scheduler implements Runnable {
 	private CommunicationPipe pipe;
@@ -9,11 +10,14 @@ public class Scheduler implements Runnable {
 		this.pipe=pipe;
 	}
 	public void handleFloorEvent(FloorEvent e) {
-		pipe.processFloorEvent(e);
+		System.out.println(Thread.currentThread().getName()+" has received the signal and is now notifying the elevator");
+		pipe.sendToElevator();
 		//do something
 	}
 	public void handleElevatorEvent() {
-		pipe.processElevatorEvent();
+		System.out.println(Thread.currentThread().getName()+" has received elevators notifcation and is now notifying the floor");
+		pipe.setElevatorEventNotifcation(false);
+		pipe.schedulerToFloor();
 	}
 	@Override
 	public void run() {
@@ -23,6 +27,7 @@ public class Scheduler implements Runnable {
 			}else if(pipe.isElevatorEventNotification()) {
 				handleElevatorEvent();	
 			}
+			Sleeper.sleep(500);
 		}
 	}
 

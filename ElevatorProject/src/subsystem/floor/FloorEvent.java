@@ -7,11 +7,13 @@ import util.Time;
 
 public class FloorEvent {
 
-	private Time time;
-	private int floor;
-	private ElevatorButton button;
-	private int carID;
-
+	protected Time time;
+	protected int floor;
+	protected ElevatorButton button;
+	protected int carID;
+	public FloorEvent() {
+		
+	}
 	public FloorEvent(String floorEvent) throws ParseException{
 		parse(floorEvent);
 	}

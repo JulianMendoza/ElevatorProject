@@ -1,47 +1,30 @@
 package util;
 
+import java.text.ParseException;
 import java.util.Random;
 
 import constants.ElevatorButton;
 import constants.FloorID;
+import subsystem.floor.FloorEvent;
 
-public class RandomFloorEvent {
-	private String time;
-	private int floor;
-	private ElevatorButton button;
-	private int carID;
+public class RandomFloorEvent extends FloorEvent{
+
 	private static final Random RANDOM = new Random();
 
 	public RandomFloorEvent() {
-		time = java.time.LocalTime.now().toString();
-		floor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
+		try {
+			this.time = new Time(java.time.LocalTime.now().toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.floor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		do {
-			carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
+			this.carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		} while (carID == floor);
 		if(carID>floor) {
 			button=ElevatorButton.UP;
 		}else {
 			button=ElevatorButton.DOWN;
 		}
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public int getFloor() {
-		return floor;
-	}
-
-	public ElevatorButton getElevatorButton() {
-		return button;
-	}
-
-	public int getElevatorCarID() {
-		return carID;
-	}
-	@Override
-	public String toString() {
-		return time+" "+floor+" "+button+" "+carID;
 	}
 }

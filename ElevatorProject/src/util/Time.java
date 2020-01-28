@@ -3,7 +3,7 @@ package util;
 import java.text.ParseException;
 
 public class Time {
-
+	private String time;
 	private int hours;
 	private int minutes;
 	private int seconds;
@@ -14,7 +14,7 @@ public class Time {
 	}
 	
 	private void parse(String time) throws ParseException {
-		
+		this.time=time;
 		String[] colonSplit = time.split(":");
 		if(colonSplit.length == 3) {
 	
@@ -72,5 +72,8 @@ public class Time {
 	public int hashCode() {
 		return 17 * minutes + hours * 3 * milliseconds + seconds * 7;
 	}
-	
+	@Override
+	public String toString() {
+		return time;
+	}
 }
