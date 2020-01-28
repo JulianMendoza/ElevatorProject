@@ -8,12 +8,11 @@ public class EventFile {
 	private long timeStamp;
 	private File file;
 	public EventFile() {
-		this.file=new File(FloorID.EVENTFILE);
+		String cwd=new File("").getAbsolutePath();
+		this.file=new File(cwd+FloorID.EVENTFILE);
 		this.timeStamp=file.lastModified();
-		System.out.println(file.exists());
 	}
 	public boolean isFileUpdated() {
-		System.out.println(file.lastModified());
 		if(timeStamp!=file.lastModified()) {
 			timeStamp=file.lastModified();
 			return true;
