@@ -20,7 +20,7 @@ public class Elevator implements Runnable {
 			} else if (isMoving) {
 				handleMove();
 			}
-			Sleeper.sleep(500);
+			Sleeper.sleep(500); 
 		}
 	}
 

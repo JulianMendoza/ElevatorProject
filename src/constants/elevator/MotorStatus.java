@@ -1,0 +1,23 @@
+package constants.elevator;
+
+public enum MotorStatus {
+
+	UP, DOWN, IDLE;
+	
+	public String toString() {
+		switch(this) {
+		case IDLE:
+			return "Idle";
+		case DOWN:
+			return "Down";
+		case UP:
+			return "Up";
+		default:
+			return null;
+		
+		}
+	}
+	
+	
+	
+}

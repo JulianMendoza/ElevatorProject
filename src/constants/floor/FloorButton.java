@@ -1,8 +1,8 @@
-package constants;
+package constants.floor;
 
 import java.text.ParseException;
 
-public enum ElevatorButton {
+public enum FloorButton {
 	
 	UP, DOWN;
 	
@@ -19,7 +19,7 @@ public enum ElevatorButton {
 		}
 	}
 	
-	public static ElevatorButton parse(String button) throws ParseException {
+	public static FloorButton parse(String button) throws ParseException {
 		button = button.toLowerCase();
 
 		switch(button) {

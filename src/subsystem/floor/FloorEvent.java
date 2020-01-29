@@ -3,8 +3,8 @@ package subsystem.floor;
 import java.text.ParseException;
 import java.util.Random;
 
-import constants.ElevatorButton;
 import constants.FloorID;
+import constants.floor.FloorButton;
 import util.Parser;
 import util.Time;
 
@@ -12,7 +12,7 @@ public class FloorEvent {
 
 	protected Time time;
 	protected int floor;
-	protected ElevatorButton button;
+	protected FloorButton button;
 	protected int carID;
 	private static final Random RANDOM = new Random();
 
@@ -24,7 +24,7 @@ public class FloorEvent {
 		parse(floorEvent);
 	}
 
-	public FloorEvent(Time time, int floor, ElevatorButton button, int carID) {
+	public FloorEvent(Time time, int floor, FloorButton button, int carID) {
 		this.time = time;
 		this.floor = floor;
 		this.button = button;
@@ -35,7 +35,7 @@ public class FloorEvent {
 		String[] spaceSplit = floorEvent.split(" ");
 		if (spaceSplit.length == 4) {
 			time = new Time(spaceSplit[0]);
-			button = ElevatorButton.parse(spaceSplit[2]);
+			button = FloorButton.parse(spaceSplit[2]);
 
 			try {
 				floor = Integer.parseInt(spaceSplit[1]);
@@ -60,9 +60,9 @@ public class FloorEvent {
 			this.carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		} while (carID == floor);
 		if (carID > floor) {
-			button = ElevatorButton.UP;
+			button = FloorButton.UP;
 		} else {
-			button = ElevatorButton.DOWN;
+			button = FloorButton.DOWN;
 		}
 		Parser.deparse(FloorID.EVENTFILE, toString());
 	}
@@ -75,7 +75,7 @@ public class FloorEvent {
 		return floor;
 	}
 
-	public ElevatorButton getElevatorButton() {
+	public FloorButton getElevatorButton() {
 		return button;
 	}
 
