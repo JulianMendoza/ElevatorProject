@@ -12,7 +12,7 @@ public class Start {
 		CommunicationPipe pipe = new CommunicationPipe();
 		EventFile eventFile = new EventFile();
 		FloorEvent rnf = new FloorEvent();
-		Thread floorSubSystem = new Thread(new FloorSystem(pipe, eventFile), "FloorSubSystem");
+		Thread floorSubSystem = new Thread(new FloorSystem(1, 6, pipe, eventFile), "FloorSubSystem");
 		Thread elevatorSubSystem = new Thread(new ElevatorSystem(pipe), "ElevatorSubSystem");
 		Thread schedulerSubSystem = new Thread(new Scheduler(pipe), "SchedulerSubSystem");
 		floorSubSystem.start();
