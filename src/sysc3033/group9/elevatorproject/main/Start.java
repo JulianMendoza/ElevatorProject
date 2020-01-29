@@ -12,7 +12,6 @@ public class Start {
 	public static void main(String[] args) {
 		CommunicationPipe pipe = new CommunicationPipe();
 		EventFile eventFile = new EventFile();
-		FloorEvent rnf = new FloorEvent();
 		FloorSpan floorSpan = new FloorSpan(1, 7);
 		Thread floorSubSystem = new Thread(new FloorSystem(floorSpan, pipe, eventFile), "FloorSubSystem");
 		Thread elevatorSubSystem = new Thread(new ElevatorSystem(floorSpan, pipe), "ElevatorSubSystem");
@@ -20,7 +19,7 @@ public class Start {
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-
+		new FloorEvent();
 //		for (int i = 0; i < numEvents; i++) {
 //			//generator.createNewEvent();
 //			Sleeper.sleep(RANDOM.nextInt((maxWaitTime - minWaitTime) + 1) + minWaitTime);

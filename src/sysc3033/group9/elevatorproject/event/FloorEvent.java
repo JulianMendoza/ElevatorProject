@@ -11,10 +11,10 @@ import sysc3033.group9.elevatorproject.util.Time;
 
 public class FloorEvent {
 
-	protected Time time;
-	protected int floor;
-	protected Direction button;
-	protected int carID;
+	private Time time;
+	private int floor;
+	private Direction button;
+	private int carID;
 	private static final Random RANDOM = new Random();
 
 	public FloorEvent() {

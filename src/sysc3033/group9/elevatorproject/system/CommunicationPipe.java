@@ -5,6 +5,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class CommunicationPipe {
 	private boolean floorEventNotifcation, promptFloor, elevatorEventNotification, promptElevator;
 	private FloorEvent event;
+	private int[] floorMap;
 
 	public CommunicationPipe() {
 		floorEventNotifcation = false;
@@ -35,7 +36,8 @@ public class CommunicationPipe {
 	/**
 	 * Communication from scheduler to elevator
 	 */
-	public synchronized void sendToElevator() {
+	public synchronized void sendToElevator(int[] floorMap) {
+		this.floorMap = floorMap;
 		floorEventNotifcation = false;
 		promptElevator = true;
 		notifyAll();

@@ -6,6 +6,7 @@ import java.util.List;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.event.EventFile;
+import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.floor.Floor;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Parser;
@@ -33,21 +34,28 @@ public class FloorSystem implements Runnable {
 
 	private void handleSchedulerEvent() {
 		/*
-		 * TODO update the lamps on of the floor subsystem i.e, is the elevator going up or down, which floor is it on. If it is stationary, lamp is off
+		 * TODO update the lamps on of the floor subsystem i.e, is the elevator going up
+		 * or down, which floor is it on. If it is stationary, lamp is off
 		 */
 		System.out.println(Thread.currentThread().getName() + " has received the signal and has update the lamps");
 		pipe.setFloorPrompt(false);
 	}
 
 	private void listen() {
+		/**
+		 * @TODO Future iterations poll the list of Floors and determine if a button was
+		 *       pressed
+		 */
 		if (eventFile.isFileUpdated()) {
 			signal();
 		}
 	}
 
 	private void signal() {
-		System.out.println(Thread.currentThread().getName() + " has recieved an event. Signaling to Scheduler");
-		pipe.handleFloorEvent(Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()));
+		FloorEvent e = Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile());
+		System.out.println(Thread.currentThread().getName() + " has recieved an event.\nFloor #" + e.getFloor()
+				+ " was pressed.\nSignaling to Scheduler");
+		pipe.handleFloorEvent(e);
 	}
 
 	@Override

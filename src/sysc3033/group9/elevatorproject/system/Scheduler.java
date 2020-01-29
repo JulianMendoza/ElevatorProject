@@ -12,15 +12,19 @@ public class Scheduler implements Runnable {
 
 	public void handleFloorEvent(FloorEvent e) {
 		/*
-		 * TODO process the event, create a queue to let the elevator know where to go next logical flow: is elevator moving in the direction of the floor, is there currently a queue etc
+		 * TODO process the event, create a queue to let the elevator know where to go
+		 * next logical flow: is elevator moving in the direction of the floor, is there
+		 * currently a queue etc
 		 */
-		System.out.println(Thread.currentThread().getName() + " has received the signal and is now notifying the elevator");
-		pipe.sendToElevator();
-		// do something
+		System.out.println(Thread.currentThread().getName() + " has received the signal.\nA user on floor #"
+				+ e.getFloor() + " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID()
+				+ "\nNotifying the elevator");
+		pipe.sendToElevator(new int[] { e.getFloor(), e.getElevatorCarID() });
 	}
 
 	public void handleElevatorEvent() {
-		System.out.println(Thread.currentThread().getName() + " has received elevators notifcation and is now notifying the floor");
+		System.out.println(Thread.currentThread().getName()
+				+ " has received elevators notifcation and is now notifying the floor");
 		pipe.setElevatorEventNotifcation(false);
 		pipe.schedulerToFloor();
 	}
