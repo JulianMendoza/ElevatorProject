@@ -7,6 +7,7 @@ import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.floor.Floor;
+import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Parser;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
@@ -16,17 +17,17 @@ public class FloorSystem implements Runnable {
 	private CommunicationPipe pipe;
 	private EventFile eventFile;
 
-	public FloorSystem(int minFloorID, int maxFloorID, CommunicationPipe pipe, EventFile eventFile) {
-		createFloors(minFloorID, maxFloorID);
+	public FloorSystem(FloorSpan floorSpan, CommunicationPipe pipe, EventFile eventFile) {
+		createFloors(floorSpan);
 		this.pipe = pipe;
 		this.eventFile = eventFile;
 	}
 
-	private void createFloors(int minFloorID, int maxFloorID) {
+	private void createFloors(FloorSpan floorSpan) {
 		floors = new ArrayList<Floor>();
 
-		for (int i = minFloorID; i <= maxFloorID; i++) {
-			floors.add(new Floor(i, i == minFloorID, i == maxFloorID));
+		for (int i = floorSpan.getMinFloorID(); i <= floorSpan.getMaxFloorID(); i++) {
+			floors.add(new Floor(i, i == floorSpan.getMinFloorID(), i == floorSpan.getMaxFloorID()));
 		}
 	}
 

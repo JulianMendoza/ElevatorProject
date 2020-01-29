@@ -1,12 +1,18 @@
 package sysc3033.group9.elevatorproject.system;
 
+import sysc3033.group9.elevatorproject.elevator.Elevator;
+import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
 public class ElevatorSystem implements Runnable {
 	private CommunicationPipe pipe;
 	private boolean isMoving;
+	private int currentFloor;
+	private Elevator elevator;
 
-	public ElevatorSystem(CommunicationPipe pipe) {
+	public ElevatorSystem(FloorSpan floorSpan, CommunicationPipe pipe) {
+		this.elevator = new Elevator(floorSpan);
+		this.currentFloor = floorSpan.getMinFloorID();
 		this.pipe = pipe;
 		this.isMoving = false;
 	}
@@ -19,7 +25,7 @@ public class ElevatorSystem implements Runnable {
 			} else if (isMoving) {
 				handleMove();
 			}
-			Sleeper.sleep(500); 
+			Sleeper.sleep(500);
 		}
 	}
 

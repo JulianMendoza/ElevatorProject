@@ -2,6 +2,7 @@ package sysc3033.group9.elevatorproject.main;
 
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
+import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.system.CommunicationPipe;
 import sysc3033.group9.elevatorproject.system.ElevatorSystem;
 import sysc3033.group9.elevatorproject.system.FloorSystem;
@@ -12,8 +13,9 @@ public class Start {
 		CommunicationPipe pipe = new CommunicationPipe();
 		EventFile eventFile = new EventFile();
 		FloorEvent rnf = new FloorEvent();
-		Thread floorSubSystem = new Thread(new FloorSystem(1, 6, pipe, eventFile), "FloorSubSystem");
-		Thread elevatorSubSystem = new Thread(new ElevatorSystem(pipe), "ElevatorSubSystem");
+		FloorSpan floorSpan = new FloorSpan(1, 7);
+		Thread floorSubSystem = new Thread(new FloorSystem(floorSpan, pipe, eventFile), "FloorSubSystem");
+		Thread elevatorSubSystem = new Thread(new ElevatorSystem(floorSpan, pipe), "ElevatorSubSystem");
 		Thread schedulerSubSystem = new Thread(new Scheduler(pipe), "SchedulerSubSystem");
 		floorSubSystem.start();
 		elevatorSubSystem.start();
