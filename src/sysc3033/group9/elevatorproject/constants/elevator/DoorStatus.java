@@ -4,27 +4,28 @@ public enum DoorStatus {
 
 	OPEN, CLOSED;
 
+	@Override
 	public String toString() {
-		switch(this) {
+		switch (this) {
 		case OPEN:
 			return "Open";
 		case CLOSED:
-			return "CLOSED";
+			return "Closed";
 		default:
 			return null;
-		
+
 		}
 	}
-	
+
 	public DoorStatus switchStatus() {
-		switch(this) {
+		switch (this) {
 		case CLOSED:
 			return OPEN;
 		case OPEN:
 			return CLOSED;
 		default:
 			return null;
-		
+
 		}
 	}
 }

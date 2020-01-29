@@ -3,9 +3,9 @@ package sysc3033.group9.elevatorproject.event;
 import java.text.ParseException;
 import java.util.Random;
 
+import sysc3033.group9.elevatorproject.constants.Direction;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.constants.FloorID;
-import sysc3033.group9.elevatorproject.constants.floor.FloorButton;
 import sysc3033.group9.elevatorproject.util.Parser;
 import sysc3033.group9.elevatorproject.util.Time;
 
@@ -13,7 +13,7 @@ public class FloorEvent {
 
 	protected Time time;
 	protected int floor;
-	protected FloorButton button;
+	protected Direction button;
 	protected int carID;
 	private static final Random RANDOM = new Random();
 
@@ -25,7 +25,7 @@ public class FloorEvent {
 		parse(floorEvent);
 	}
 
-	public FloorEvent(Time time, int floor, FloorButton button, int carID) {
+	public FloorEvent(Time time, int floor, Direction button, int carID) {
 		this.time = time;
 		this.floor = floor;
 		this.button = button;
@@ -36,7 +36,7 @@ public class FloorEvent {
 		String[] spaceSplit = floorEvent.split(" ");
 		if (spaceSplit.length == 4) {
 			time = new Time(spaceSplit[0]);
-			button = FloorButton.parse(spaceSplit[2]);
+			button = Direction.parse(spaceSplit[2]);
 
 			try {
 				floor = Integer.parseInt(spaceSplit[1]);
@@ -61,9 +61,9 @@ public class FloorEvent {
 			this.carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		} while (carID == floor);
 		if (carID > floor) {
-			button = FloorButton.UP;
+			button = Direction.UP;
 		} else {
-			button = FloorButton.DOWN;
+			button = Direction.DOWN;
 		}
 		Parser.deparse(FilePath.EVENT_FILE, toString());
 	}
@@ -76,7 +76,7 @@ public class FloorEvent {
 		return floor;
 	}
 
-	public FloorButton getElevatorButton() {
+	public Direction getElevatorButton() {
 		return button;
 	}
 

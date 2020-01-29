@@ -1,15 +1,16 @@
 package sysc3033.group9.elevatorproject.elevator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import sysc3033.group9.elevatorproject.constants.elevator.DoorStatus;
 import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
+import sysc3033.group9.elevatorproject.util.ButtonLamp;
 
 public class Elevator {
 
-	private Map<ElevatorButton, ElevatorLamp> buttons;
+	private List<ElevatorButton> buttons;
 	private Motor motor;
 	private Door door;
 
@@ -20,9 +21,9 @@ public class Elevator {
 	private void createElevator(FloorSpan floorSpan) {
 		motor = new Motor(MotorStatus.IDLE);
 		door = new Door(DoorStatus.CLOSED);
-		buttons = new HashMap<ElevatorButton, ElevatorLamp>();
+		buttons = new ArrayList<ElevatorButton>();
 		for (int i = floorSpan.getMinFloorID(); i <= floorSpan.getMaxFloorID(); i++) {
-			buttons.put(new ElevatorButton(i), new ElevatorLamp(false));
+			buttons.add(new ElevatorButton(i));
 		}
 	}
 
@@ -35,10 +36,10 @@ public class Elevator {
 	}
 
 	public void pressButton(int targetFloor) {
-		for (ElevatorButton button : buttons.keySet()) {
+		for (ElevatorButton button : buttons) {
 			if (button.getTargetFloor() == targetFloor) {
 				// notify elevator system
-				ElevatorLamp lamp = buttons.get(button);
+				ButtonLamp lamp = button.getLamp();
 				if (!lamp.isLit()) {
 					lamp.switchStatus();
 				}
