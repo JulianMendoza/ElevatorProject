@@ -21,10 +21,10 @@ public enum Direction {
 		}
 	}
 
-	public static Direction parse(String button) throws ParseException {
-		button = button.toLowerCase();
+	public static Direction parse(String direction) throws ParseException {
+		direction = direction.toLowerCase();
 
-		switch (button) {
+		switch (direction) {
 		case "up":
 			return UP;
 		case "down":
@@ -32,7 +32,7 @@ public enum Direction {
 		case "idle":
 			return IDLE;
 		default:
-			throw new ParseException("Invalid button", 0);
+			throw new ParseException("Invalid direction", 0);
 		}
 	}
 }
