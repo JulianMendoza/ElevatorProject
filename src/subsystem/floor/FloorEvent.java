@@ -1,8 +1,11 @@
 package subsystem.floor;
 
 import java.text.ParseException;
+import java.util.Random;
 
 import constants.ElevatorButton;
+import constants.FloorID;
+import util.Parser;
 import util.Time;
 
 public class FloorEvent {
@@ -11,6 +14,7 @@ public class FloorEvent {
 	protected int floor;
 	protected ElevatorButton button;
 	protected int carID;
+	private static final Random RANDOM = new Random();
 	public FloorEvent() {
 		
 	}
@@ -41,6 +45,24 @@ public class FloorEvent {
 		} else {
 			throw new ParseException("Invalid floor event", 0);
 		}
+	}
+	
+	public void createNewEvent() {
+		try {
+			this.time = new Time(java.time.LocalTime.now().toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		this.floor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
+		do {
+			this.carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
+		} while (carID == floor);
+		if(carID>floor) {
+			button=ElevatorButton.UP;
+		}else {
+			button=ElevatorButton.DOWN;
+		}
+		Parser.deparse(FloorID.EVENTFILE,toString());
 	}
 	
 	public Time getTime() {

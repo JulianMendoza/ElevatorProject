@@ -15,7 +15,11 @@ public class Floor implements Runnable {
 	}
 
 	private void handleSchedulerEvent() {
-		System.out.println("Floor has received the signal");
+		/*
+		 * TODO update the lamps on of the floor subsystem i.e, is the elevator going up or down, which 
+		 * floor is it on. If it is stationary, lamp is off
+		 */
+		System.out.println(Thread.currentThread().getName()+" has received the signal and has update the lamps");
 		pipe.setFloorPrompt(false);
 	}
 	private void listen() {

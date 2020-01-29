@@ -10,6 +10,10 @@ public class Scheduler implements Runnable {
 		this.pipe=pipe;
 	}
 	public void handleFloorEvent(FloorEvent e) {
+		/*
+		 * TODO process the event, create a queue to let the elevator know where to go next
+		 * logical flow: is elevator moving in the direction of the floor, is there currently a queue etc
+		 */
 		System.out.println(Thread.currentThread().getName()+" has received the signal and is now notifying the elevator");
 		pipe.sendToElevator();
 		//do something

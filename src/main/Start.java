@@ -4,16 +4,15 @@ import subsystem.CommunicationPipe;
 import subsystem.elevator.Elevator;
 import subsystem.floor.EventFile;
 import subsystem.floor.Floor;
+import subsystem.floor.FloorEvent;
 import subsystem.scheduler.Scheduler;
 import util.RandomEventGenerator;
-import util.RandomFloorEvent;
-
 
 public class Start {
 	public static void main(String[] args) {
 		CommunicationPipe pipe=new CommunicationPipe();
 		EventFile eventFile=new EventFile();
-		RandomFloorEvent rnf=new RandomFloorEvent();
+		FloorEvent rnf=new FloorEvent();
 		RandomEventGenerator rng=new RandomEventGenerator(1,500,1000,rnf);
 		Thread floorSubSystem = new Thread(new Floor(pipe,eventFile),"FloorSubSystem");
 		Thread elevatorSubSystem = new Thread(new Elevator(pipe),"ElevatorSubSystem");
