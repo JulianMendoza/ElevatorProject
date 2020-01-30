@@ -3,15 +3,15 @@ package sysc3033.group9.elevatorproject.system;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 public class CommunicationPipe {
-	private boolean floorEventNotifcation, promptFloor, elevatorEventNotification, promptElevator;
+	private boolean floorToScheduler, schedulerToFloor, elevatorToFloor, schedulerToElevator;
 	private FloorEvent event;
 	private int[] floorMap;
 
 	public CommunicationPipe() {
-		floorEventNotifcation = false;
-		promptFloor = false;
-		elevatorEventNotification = false;
-		promptElevator = false;
+		floorToScheduler = false;
+		schedulerToFloor = false;
+		elevatorToFloor = false;
+		schedulerToElevator = false;
 	}
 
 	/**
@@ -19,9 +19,9 @@ public class CommunicationPipe {
 	 * 
 	 * @param e
 	 */
-	public synchronized void handleFloorEvent(FloorEvent e) {
+	public synchronized void floorToScheduler(FloorEvent e) {
 		event = e;
-		floorEventNotifcation = true;
+		floorToScheduler = true;
 		notifyAll();
 	}
 
@@ -29,7 +29,7 @@ public class CommunicationPipe {
 	 * Communication between scheduler to floor
 	 */
 	public synchronized void schedulerToFloor() {
-		promptFloor = true;
+		schedulerToFloor = true;
 		notifyAll();
 	}
 
@@ -38,8 +38,8 @@ public class CommunicationPipe {
 	 */
 	public synchronized void sendToElevator(int[] floorMap) {
 		this.floorMap = floorMap;
-		floorEventNotifcation = false;
-		promptElevator = true;
+		floorToScheduler = false;
+		schedulerToElevator = true;
 		notifyAll();
 	}
 
@@ -47,39 +47,43 @@ public class CommunicationPipe {
 	 * Communication from elevator to scheduler
 	 */
 	public synchronized void elevatorToFloor() {
-		elevatorEventNotification = true;
+		elevatorToFloor = true;
 		notifyAll();
 	}
 
-	public boolean isFloorEventNotifcation() {
-		return floorEventNotifcation;
+	public boolean isFloorToScheduler() {
+		return floorToScheduler;
 	}
 
-	public boolean isPromptFloor() {
-		return promptFloor;
+	public boolean isSchedulerToFloor() {
+		return schedulerToFloor;
 	}
 
-	public boolean isElevatorEventNotification() {
-		return elevatorEventNotification;
+	public boolean isElevatorToScheduler() {
+		return elevatorToFloor;
 	}
 
-	public boolean isPromptElevator() {
-		return promptElevator;
+	public boolean isSchedulerToElevator() {
+		return schedulerToElevator;
 	}
 
 	public FloorEvent getFloorEvent() {
 		return event;
 	}
 
-	public void setElevatorPrompt(boolean receivedEvent) {
-		promptElevator = receivedEvent;
+	public void setSchedulerToElevator(boolean event) {
+		schedulerToElevator = event;
 	}
 
-	public void setElevatorEventNotifcation(boolean receivedEvent) {
-		elevatorEventNotification = receivedEvent;
+	public void setElevatorToFloor(boolean event) {
+		elevatorToFloor = event;
 	}
 
-	public void setFloorPrompt(boolean receivedEvent) {
-		promptFloor = receivedEvent;
+	public void setSchedulerToFloor(boolean event) {
+		schedulerToFloor = event;
+	}
+
+	public void setFloorToScheduler(boolean event) {
+		floorToScheduler = event;
 	}
 }

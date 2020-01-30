@@ -25,16 +25,16 @@ public class Scheduler implements Runnable {
 	public void handleElevatorEvent() {
 		System.out.println(Thread.currentThread().getName()
 				+ " has received elevators notifcation and is now notifying the floor");
-		pipe.setElevatorEventNotifcation(false);
+		pipe.setElevatorToFloor(false);
 		pipe.schedulerToFloor();
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			if (pipe.isFloorEventNotifcation()) {
+			if (pipe.isFloorToScheduler()) {
 				handleFloorEvent(pipe.getFloorEvent());
-			} else if (pipe.isElevatorEventNotification()) {
+			} else if (pipe.isElevatorToScheduler()) {
 				handleElevatorEvent();
 			}
 			Sleeper.sleep(500);

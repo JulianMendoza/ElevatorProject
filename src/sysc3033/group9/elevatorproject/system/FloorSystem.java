@@ -38,7 +38,7 @@ public class FloorSystem implements Runnable {
 		 * or down, which floor is it on. If it is stationary, lamp is off
 		 */
 		System.out.println(Thread.currentThread().getName() + " has received the signal and has update the lamps");
-		pipe.setFloorPrompt(false);
+		pipe.setSchedulerToFloor(false);
 	}
 
 	private void listen() {
@@ -55,13 +55,13 @@ public class FloorSystem implements Runnable {
 		FloorEvent e = Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile());
 		System.out.println(Thread.currentThread().getName() + " has recieved an event.\nFloor #" + e.getFloor()
 				+ " was pressed.\nSignaling to Scheduler");
-		pipe.handleFloorEvent(e);
+		pipe.floorToScheduler(e);
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			if (pipe.isPromptFloor()) {
+			if (pipe.isSchedulerToFloor()) {
 				handleSchedulerEvent();
 			} else {
 				listen();
