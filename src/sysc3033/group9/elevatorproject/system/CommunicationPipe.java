@@ -5,6 +5,11 @@ import java.util.Map.Entry;
 
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToFloor, schedulerToElevator;
 	private FloorEvent event;

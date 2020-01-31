@@ -4,6 +4,11 @@ import java.io.File;
 
 import sysc3033.group9.elevatorproject.constants.FilePath;
 
+/**
+ * 
+ * @author Julian Mendoza
+ *
+ */
 public class EventFile {
 	private long timeStamp;
 	private File file;

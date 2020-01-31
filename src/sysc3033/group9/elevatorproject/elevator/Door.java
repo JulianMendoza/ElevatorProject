@@ -2,6 +2,11 @@ package sysc3033.group9.elevatorproject.elevator;
 
 import sysc3033.group9.elevatorproject.constants.elevator.DoorStatus;
 
+/**
+ *
+ * @author Giuseppe Papalia
+ *
+ */
 public class Door {
 
 	private DoorStatus status;

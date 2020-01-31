@@ -12,6 +12,11 @@ import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Parser;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
+/**
+ * 
+ * @author Julian Mendoza, Giuseppe Papalia
+ *
+ */
 public class FloorSystem implements Runnable {
 
 	private List<Floor> floors;

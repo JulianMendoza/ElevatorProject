@@ -2,6 +2,11 @@ package sysc3033.group9.elevatorproject.elevator;
 
 import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public class Motor {
 
 	private MotorStatus status;

@@ -10,6 +10,11 @@ import sysc3033.group9.elevatorproject.elevator.Motor;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
+/**
+ * \
+ * @author Julian Mendoza, Giuseppe Papalia
+ *
+ */
 public class ElevatorSystem implements Runnable {
 	private CommunicationPipe pipe;
 	private boolean isMoving;

@@ -3,15 +3,22 @@ package sysc3033.group9.elevatorproject.system;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Queue;
 
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
+/**
+ * 
+ * @author Julian Mendoza
+ *
+ */
 public class Scheduler implements Runnable {
 	private CommunicationPipe pipe;
 	private ArrayList<Map.Entry<Integer, Integer>> elevatorQueue;
 
+	
 	public Scheduler(CommunicationPipe pipe) {
 		this.pipe = pipe;
 		elevatorQueue = new ArrayList<Map.Entry<Integer, Integer>>();
@@ -25,6 +32,7 @@ public class Scheduler implements Runnable {
 		 */
 		Map.Entry<Integer, Integer> floorMap = new AbstractMap.SimpleEntry<Integer, Integer>(e.getFloor(),
 				e.getElevatorCarID());
+		
 		/*
 		 * if (elevatorQueue.isEmpty()) { elevatorQueue.add(floorMap); } else {
 		 * determinePositionInQueue(floorMap); }

@@ -1,5 +1,10 @@
 package sysc3033.group9.elevatorproject.constants;
 
+/**
+ * 
+ * @author 
+ *
+ */
 public class SleepTime {
 
 	public static final long DEFAULT = 250;

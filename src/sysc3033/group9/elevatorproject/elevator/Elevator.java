@@ -8,6 +8,11 @@ import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.ButtonLamp;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public class Elevator {
 
 	private List<ElevatorButton> buttons;

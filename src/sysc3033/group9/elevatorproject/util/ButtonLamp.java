@@ -1,5 +1,10 @@
 package sysc3033.group9.elevatorproject.util;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public class ButtonLamp {
 
 	boolean isLit;

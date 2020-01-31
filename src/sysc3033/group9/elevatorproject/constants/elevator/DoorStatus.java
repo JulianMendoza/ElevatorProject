@@ -1,5 +1,10 @@
 package sysc3033.group9.elevatorproject.constants.elevator;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public enum DoorStatus {
 
 	OPEN, CLOSED;

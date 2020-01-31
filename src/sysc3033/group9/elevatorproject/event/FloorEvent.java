@@ -9,6 +9,11 @@ import sysc3033.group9.elevatorproject.constants.FloorID;
 import sysc3033.group9.elevatorproject.util.Parser;
 import sysc3033.group9.elevatorproject.util.Time;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public class FloorEvent {
 
 	private Time time;

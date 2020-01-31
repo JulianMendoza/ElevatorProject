@@ -11,6 +11,11 @@ import sysc3033.group9.elevatorproject.system.FloorSystem;
 import sysc3033.group9.elevatorproject.system.Scheduler;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
+/**
+ * 
+ * @author Julian Mendoza
+ *
+ */
 public class Start {
 	public static void main(String[] args) {
 		CommunicationPipe pipe = new CommunicationPipe();
