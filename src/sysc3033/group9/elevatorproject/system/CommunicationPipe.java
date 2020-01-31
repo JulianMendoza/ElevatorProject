@@ -1,11 +1,14 @@
 package sysc3033.group9.elevatorproject.system;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToFloor, schedulerToElevator;
 	private FloorEvent event;
-	private int[] floorMap;
+	private Map.Entry<Integer, Integer> floorMap;
 
 	public CommunicationPipe() {
 		floorToScheduler = false;
@@ -36,7 +39,7 @@ public class CommunicationPipe {
 	/**
 	 * Communication from scheduler to elevator
 	 */
-	public synchronized void sendToElevator(int[] floorMap) {
+	public synchronized void sendToElevator(Entry<Integer, Integer> floorMap) {
 		this.floorMap = floorMap;
 		floorToScheduler = false;
 		schedulerToElevator = true;
@@ -85,5 +88,9 @@ public class CommunicationPipe {
 
 	public void setFloorToScheduler(boolean event) {
 		floorToScheduler = event;
+	}
+
+	public Map.Entry<Integer, Integer> getNextEvent() {
+		return floorMap;
 	}
 }
