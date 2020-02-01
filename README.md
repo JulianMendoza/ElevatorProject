@@ -1,4 +1,4 @@
-# SYSC 3303 - Elevator System 
+# Elevator System 
 
 Authors: Oluwafunbi Aboderin, Mohammad Gaffori, Kelly Harrison, Julian Mendoza, Giuseppe Papalia
 
