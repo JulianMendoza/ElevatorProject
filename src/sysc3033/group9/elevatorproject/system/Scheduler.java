@@ -56,7 +56,7 @@ public class Scheduler implements Runnable {
 				+ " has received elevators notifcation and is now notifying the floor");
 		view.setText(view.getSchedulerText(), Thread.currentThread().getName()
 				+ " has received elevators notifcation and is now notifying the floor\n");
-		pipe.setElevatorToFloor(false);
+		pipe.setElevatorToScheduler(false);
 		pipe.schedulerToFloor();
 	}
 
@@ -65,7 +65,8 @@ public class Scheduler implements Runnable {
 		while (true) {
 			if (pipe.isFloorToScheduler()) {
 				handleFloorEvent(pipe.getFloorEvent());
-			} else if (pipe.isElevatorToScheduler()) {
+			}
+			if (pipe.isElevatorToScheduler()) {
 				handleElevatorEvent();
 			}
 			Sleeper.sleep(SleepTime.DEFAULT);
