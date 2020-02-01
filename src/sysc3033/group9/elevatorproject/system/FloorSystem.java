@@ -3,6 +3,7 @@ package sysc3033.group9.elevatorproject.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import sysc3033.group9.elevatorproject.GUI.SystemView;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.event.EventFile;
@@ -22,11 +23,13 @@ public class FloorSystem implements Runnable {
 	private List<Floor> floors;
 	private CommunicationPipe pipe;
 	private EventFile eventFile;
+	private SystemView view;
 
-	public FloorSystem(FloorSpan floorSpan, CommunicationPipe pipe, EventFile eventFile) {
+	public FloorSystem(FloorSpan floorSpan, CommunicationPipe pipe, EventFile eventFile, SystemView view) {
 		createFloors(floorSpan);
 		this.pipe = pipe;
 		this.eventFile = eventFile;
+		this.view = view;
 	}
 
 	private void createFloors(FloorSpan floorSpan) {
@@ -43,6 +46,8 @@ public class FloorSystem implements Runnable {
 		 * or down, which floor is it on. If it is stationary, lamp is off
 		 */
 		System.out.println(Thread.currentThread().getName() + " has received the signal and has update the lamps");
+		view.setText(view.getFloorText(),
+				Thread.currentThread().getName() + " has received the signal and has update the lamps\n");
 		pipe.setSchedulerToFloor(false);
 	}
 
@@ -59,7 +64,9 @@ public class FloorSystem implements Runnable {
 	private void signal() {
 		FloorEvent e = Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile());
 		System.out.println(Thread.currentThread().getName() + " has recieved an event.\nFloor #" + e.getFloor()
-				+ " was pressed.\nSignaling to Scheduler");
+				+ " was pressed.\nSignaling to Scheduler\n");
+		view.setText(view.getFloorText(), Thread.currentThread().getName() + " has recieved an event.\nFloor #"
+				+ e.getFloor() + " was pressed.\nSignaling to Scheduler\n");
 		pipe.floorToScheduler(e);
 	}
 

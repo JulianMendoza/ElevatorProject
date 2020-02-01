@@ -1,25 +1,26 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
 
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 /**
  * 
- * @author 
+ * @author
  *
  */
 public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToFloor, schedulerToElevator;
-	private FloorEvent event;
-	private Map.Entry<Integer, Integer> floorMap;
+	private FloorEvent generatedEvent;
+	private List<int[]> nextInQueue;
 
 	public CommunicationPipe() {
 		floorToScheduler = false;
 		schedulerToFloor = false;
 		elevatorToFloor = false;
 		schedulerToElevator = false;
+		nextInQueue = new ArrayList<int[]>();
 	}
 
 	/**
@@ -28,7 +29,7 @@ public class CommunicationPipe {
 	 * @param e
 	 */
 	public synchronized void floorToScheduler(FloorEvent e) {
-		event = e;
+		generatedEvent = e;
 		floorToScheduler = true;
 		notifyAll();
 	}
@@ -44,9 +45,16 @@ public class CommunicationPipe {
 	/**
 	 * Communication from scheduler to elevator
 	 */
-	public synchronized void sendToElevator(Entry<Integer, Integer> floorMap) {
-		this.floorMap = floorMap;
+	public synchronized void sendToElevator(int[] map) {
+		nextInQueue.add(map);
 		floorToScheduler = false;
+		while (schedulerToElevator) {
+			try {
+				wait();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 		schedulerToElevator = true;
 		notifyAll();
 	}
@@ -76,7 +84,7 @@ public class CommunicationPipe {
 	}
 
 	public FloorEvent getFloorEvent() {
-		return event;
+		return generatedEvent;
 	}
 
 	public void setSchedulerToElevator(boolean event) {
@@ -95,7 +103,7 @@ public class CommunicationPipe {
 		floorToScheduler = event;
 	}
 
-	public Map.Entry<Integer, Integer> getNextEvent() {
-		return floorMap;
+	public int[] getNextInQueue() {
+		return nextInQueue.remove(0);
 	}
 }
