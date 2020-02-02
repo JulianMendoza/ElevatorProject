@@ -9,6 +9,7 @@ import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.ButtonLamp;
 
 /**
+ * Elevator class for the elevator system
  * 
  * @author Giuseppe Papalia
  *
@@ -19,10 +20,20 @@ public class Elevator {
 	private Motor motor;
 	private Door door;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param floorSpan the span of the floors
+	 */
 	public Elevator(FloorSpan floorSpan) {
 		createElevator(floorSpan);
 	}
 
+	/**
+	 * Method to create the elevator
+	 * 
+	 * @param floorSpan
+	 */
 	private void createElevator(FloorSpan floorSpan) {
 		motor = new Motor(MotorStatus.IDLE);
 		door = new Door(DoorStatus.CLOSED);
@@ -32,14 +43,11 @@ public class Elevator {
 		}
 	}
 
-	public Door getDoor() {
-		return door;
-	}
-
-	public Motor getMotor() {
-		return motor;
-	}
-
+	/**
+	 * Method to press the button on the elevator
+	 * 
+	 * @param targetFloor
+	 */
 	public void pressButton(int targetFloor) {
 		for (ElevatorButton button : buttons) {
 			if (button.getTargetFloor() == targetFloor) {
@@ -50,5 +58,16 @@ public class Elevator {
 				}
 			}
 		}
+	}
+
+	/*
+	 * getters door and motor
+	 */
+	public Door getDoor() {
+		return door;
+	}
+
+	public Motor getMotor() {
+		return motor;
 	}
 }
