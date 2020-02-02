@@ -5,13 +5,16 @@ import java.io.File;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 
 /**
- * This file represents an elevator event; It simulates an elevator stop and go request
- * @author Julian Mendoza
+ * This file represents an elevator event; It simulates an elevator stop and go
+ * request
+ * 
+ * @author Julian Mendoza, Kelly Harrison
  *
  */
 public class EventFile {
 	private long timeStamp;
 	private File file;
+
 	/**
 	 * Constructor for EventFile class
 	 */
@@ -20,8 +23,10 @@ public class EventFile {
 		this.file = new File(cwd + FilePath.EVENT_FILE);
 		this.timeStamp = file.lastModified();
 	}
+
 	/**
 	 * Checks if the file is updated
+	 * 
 	 * @return true if the file was successfully updated, false otherwise
 	 */
 	public boolean isFileUpdated() {
@@ -32,8 +37,10 @@ public class EventFile {
 			return false;
 		}
 	}
+
 	/**
-	 * getter to get the file 
+	 * getter to get the file
+	 * 
 	 * @return type file
 	 */
 	public File getFile() {
