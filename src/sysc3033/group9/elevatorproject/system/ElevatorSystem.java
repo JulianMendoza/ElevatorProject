@@ -10,7 +10,7 @@ import sysc3033.group9.elevatorproject.floor.FloorSpan;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
- * \
+ * ElevatorSystem thread Handles events that the elevators must process
  * 
  * @author Julian Mendoza, Giuseppe Papalia
  *
@@ -22,6 +22,13 @@ public class ElevatorSystem implements Runnable {
 	private Elevator elevator;
 	private SystemView view;
 
+	/**
+	 * Default constructor
+	 * 
+	 * @param floorSpan the span of the elevator
+	 * @param pipe      the communication pipe
+	 * @param view      GUI
+	 */
 	public ElevatorSystem(FloorSpan floorSpan, CommunicationPipe pipe, SystemView view) {
 		this.elevator = new Elevator(floorSpan);
 		this.currentFloor = floorSpan.getMinFloorID();
@@ -44,6 +51,9 @@ public class ElevatorSystem implements Runnable {
 		}
 	}
 
+	/**
+	 * Method to handle an elevatorEvent
+	 */
 	private void handleElevatorEvent() {
 		/**
 		 * TODO if the elevator is not moving, update the motor to go in the
@@ -62,6 +72,9 @@ public class ElevatorSystem implements Runnable {
 		}
 	}
 
+	/**
+	 * Method to handle movements of the elevators
+	 */
 	private void handleMove() {
 		/*
 		 * TODO Once the elevator starts moving, it must update the lamps to the
@@ -90,6 +103,12 @@ public class ElevatorSystem implements Runnable {
 		isMoving = false;
 	}
 
+	/**
+	 * Helper function to move the elevators
+	 * 
+	 * @param direction The direction of the elevator
+	 * @param steps     The amount of floors the elevator must move
+	 */
 	private void move(Direction direction, int steps) {
 		for (int i = 0; i < steps; i++) {
 			Sleeper.sleep(SleepTime.FLOOR);
@@ -115,6 +134,11 @@ public class ElevatorSystem implements Runnable {
 		view.setText(view.getElevatorText(), "DOOR CLOSED!\n");
 	}
 
+	/**
+	 * Method to announce a change in the display lamps
+	 * 
+	 * @param msg the message to be announced as a string
+	 */
 	private void announce(String msg) {
 		System.out.println(msg);
 		view.setText(view.getElevatorText(),

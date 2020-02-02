@@ -9,7 +9,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
  * Gateway for all threads to communicate Contains the necessary information for
  * processing signals
  * 
- * @author
+ * @author Julian Mendoza
  *
  */
 public class CommunicationPipe {

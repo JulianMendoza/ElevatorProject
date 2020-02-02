@@ -8,6 +8,8 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
+ * Scheduler Thread handles the communication between the elevator and floor
+ * subsystem
  * 
  * @author Julian Mendoza
  *
@@ -17,12 +19,23 @@ public class Scheduler implements Runnable {
 	private ArrayList<FloorEvent> elevatorQueue;
 	private SystemView view;
 
+	/**
+	 * Default constructor of the Scheduler
+	 * 
+	 * @param pipe The communication pipe
+	 * @param view GUI view
+	 */
 	public Scheduler(CommunicationPipe pipe, SystemView view) {
 		this.pipe = pipe;
 		this.view = view;
 		elevatorQueue = new ArrayList<FloorEvent>();
 	}
 
+	/**
+	 * Method to handle the floor events
+	 * 
+	 * @param e the FloorEvent passed
+	 */
 	public void handleFloorEvent(FloorEvent e) {
 		/*
 		 * TODO process the event, create a queue to let the elevator know where to go
@@ -50,6 +63,9 @@ public class Scheduler implements Runnable {
 	 * if (!elevatorQueue.contains(floorMap)) {
 	 * 
 	 * } }
+	 */
+	/**
+	 * Method to handle the elevator events
 	 */
 	public void handleElevatorEvent() {
 		System.out.println(Thread.currentThread().getName()

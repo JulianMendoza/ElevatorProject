@@ -7,6 +7,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.JTextComponent;
 
+/**
+ * GUI of the system
+ * 
+ * @author Julian Mendoza
+ *
+ */
 public class SystemView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
