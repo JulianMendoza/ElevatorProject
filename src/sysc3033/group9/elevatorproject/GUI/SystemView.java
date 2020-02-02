@@ -23,8 +23,8 @@ public class SystemView extends JFrame {
 		lblNewLabel = new JLabel("EventFile Log");
 		lblNewLabel_1 = new JLabel("DisplayLamp");
 		lblNewLabel_2 = new JLabel("FloorSubSystem Log");
-		lblNewLabel_3 = new JLabel("Scheduler Log");
-		lblNewLabel_4 = new JLabel("ElevatorSubSystem Log");
+		lblNewLabel_3 = new JLabel("ElevatorSubSystem Log");
+		lblNewLabel_4 = new JLabel("Scheduler Log");
 		displayScrollPane = new JScrollPane();
 		schedulerScrollPane = new JScrollPane();
 		displayText = new JTextArea();

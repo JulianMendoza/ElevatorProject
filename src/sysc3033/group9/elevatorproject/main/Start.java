@@ -1,7 +1,5 @@
 package sysc3033.group9.elevatorproject.main;
 
-import java.util.Random;
-
 import sysc3033.group9.elevatorproject.GUI.SystemView;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.event.EventFile;
@@ -12,12 +10,12 @@ import sysc3033.group9.elevatorproject.system.ElevatorSystem;
 import sysc3033.group9.elevatorproject.system.FloorSystem;
 import sysc3033.group9.elevatorproject.system.Scheduler;
 import sysc3033.group9.elevatorproject.util.Parser;
-import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
+ * Main wrapper class System begins here Generates one random event for now
  * 
  * @author Julian Mendoza
- *
+ * 
  */
 public class Start {
 	public static void main(String[] args) {
@@ -31,16 +29,11 @@ public class Start {
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-//		new FloorEvent();
-//		for (int i = 0; i < numEvents; i++) {
-//			//generator.createNewEvent();
-//			Sleeper.sleep(RANDOM.nextInt((maxWaitTime - minWaitTime) + 1) + minWaitTime);
-//		}
-		for (int i = 0; i < 5; i++) {
-			new FloorEvent();
-			view.setText(view.getEventPanelText(), "EVENT" + (i + 1) + ":"
-					+ Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()).toString() + "\n");
-			Sleeper.sleep(new Random().nextInt((5000 - 200) + 1) + 200);
-		}
+		// for (int i = 0; i < 1; i++) {
+		new FloorEvent();
+		view.setText(view.getEventPanelText(),
+				"EVENT" + 1 + ":" + Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()).toString() + "\n");
+		// Sleeper.sleep(new Random().nextInt((5000 - 200) + 1) + 200);
+		// }
 	}
 }

@@ -35,7 +35,8 @@ public class ElevatorSystem implements Runnable {
 		while (true) {
 			if (pipe.isSchedulerToElevator()) {
 				handleElevatorEvent();
-			} else if (isMoving) {
+			}
+			if (isMoving) {
 				handleMove();
 			}
 			Sleeper.sleep(SleepTime.DEFAULT);
@@ -119,7 +120,7 @@ public class ElevatorSystem implements Runnable {
 		view.setText(view.getElevatorText(),
 				msg + "\n" + Thread.currentThread().getName() + " has signaled the lamps to the Scheduler.\n");
 		System.out.println(Thread.currentThread().getName() + " has signaled the lamps to the Scheduler.");
-		pipe.elevatorToFloor();
+		pipe.elevatorToScheduler();
 	}
 
 }
