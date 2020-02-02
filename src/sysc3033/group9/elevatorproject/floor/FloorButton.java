@@ -4,10 +4,10 @@ import sysc3033.group9.elevatorproject.constants.Direction;
 import sysc3033.group9.elevatorproject.util.Button;
 
 /**
- * FloorButton represents the button on the elevator to choose the direction you
- * want to go
+ * FloorButton represents the button on the elevator to choose the direction you want to go
  *
- * @author Giuseppe Pappalia, Kelly Harrison
+ * @author Giuseppe Papalia
+ * @documentation Kelly Harrison
  */
 public class FloorButton extends Button {
 

@@ -3,7 +3,8 @@ package sysc3033.group9.elevatorproject.floor;
 /**
  * FloorSpan class sets the minimum and maximum floors in the elevator
  * 
- * @Kelly Harrison
+ * @author Giuseppe Papalia
+ * @documentation Kelly Harrison
  */
 public class FloorSpan {
 
