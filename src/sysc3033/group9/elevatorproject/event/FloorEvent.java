@@ -10,7 +10,7 @@ import sysc3033.group9.elevatorproject.util.Parser;
 import sysc3033.group9.elevatorproject.util.Time;
 
 /**
- * 
+ * FloorEvent class generates a new random floor event for the elevator 
  * @author Giuseppe Papalia
  *
  */
@@ -21,22 +21,35 @@ public class FloorEvent {
 	private Direction button;
 	private int carID;
 	private static final Random RANDOM = new Random();
-
+	/**
+	 * Constructor for FloorEvent
+	 */
 	public FloorEvent() {
 		createNewEvent();
 	}
-
+	/**
+	 * Second constructor for FloorEvent
+	 * @param floorEvent is the string passed in of the floor information
+	 */
 	public FloorEvent(String floorEvent) throws ParseException {
 		parse(floorEvent);
 	}
-
+	/**
+	 * Third FloorEvent constructor
+	 * @param time is the time passed in
+	 * @param floor is the floor number between the MAX and MIN values
+	 * @param direction is either UP or DOWN
+	 * @param carID is an integer that  between separate elevator cars 
+	 */
 	public FloorEvent(Time time, int floor, Direction button, int carID) {
 		this.time = time;
 		this.floor = floor;
 		this.button = button;
 		this.carID = carID;
 	}
-
+	/**
+	 * parse method splits up the floor event data passed in
+	 */
 	private void parse(String floorEvent) throws ParseException {
 		String[] spaceSplit = floorEvent.split(" ");
 		if (spaceSplit.length == 4) {
@@ -54,7 +67,9 @@ public class FloorEvent {
 			throw new ParseException("Invalid floor event", 0);
 		}
 	}
-
+	/**
+	 * Creates a new floor event within the elevator floor maximum and minimum values
+	 */
 	private void createNewEvent() {
 		try {
 			this.time = new Time(java.time.LocalTime.now().toString());
@@ -72,23 +87,35 @@ public class FloorEvent {
 		}
 		Parser.deparse(FilePath.EVENT_FILE, toString());
 	}
-
+	/**
+	 * getter for the time
+	 * @return the time
+	 */
 	public Time getTime() {
 		return time;
 	}
-
+	/**
+	 * getter for the floor value
+	 * @return the floor as an integer
+	 */
 	public int getFloor() {
 		return floor;
 	}
-
+	/**
+	 * getter for the elevator button
+	 * @return the direction either UP or DOWN
+	 */
 	public Direction getElevatorButton() {
 		return button;
 	}
-
+	/**
+	 * getter for the elevator car ID
+	 * @return the elevator car ID as an integer
+	 */
 	public int getElevatorCarID() {
 		return carID;
 	}
-
+	
 	@Override
 	public String toString() {
 		return time.toString() + " " + floor + " " + button + " " + carID;
