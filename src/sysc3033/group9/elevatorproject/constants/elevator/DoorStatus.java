@@ -1,6 +1,7 @@
 package sysc3033.group9.elevatorproject.constants.elevator;
 
 /**
+ * DoorStatus Enum OPEN when open, CLOSED when closed
  * 
  * @author Giuseppe Papalia
  *
@@ -9,6 +10,9 @@ public enum DoorStatus {
 
 	OPEN, CLOSED;
 
+	/**
+	 * toString
+	 */
 	@Override
 	public String toString() {
 		switch (this) {
@@ -22,6 +26,11 @@ public enum DoorStatus {
 		}
 	}
 
+	/**
+	 * method to switch status
+	 * 
+	 * @return the opposite enum
+	 */
 	public DoorStatus switchStatus() {
 		switch (this) {
 		case CLOSED:

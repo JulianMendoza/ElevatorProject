@@ -3,6 +3,7 @@ package sysc3033.group9.elevatorproject.constants;
 import java.text.ParseException;
 
 /**
+ * Direction Enum UP, DOWN and IDLE
  * 
  * @author Giuseppe Papalia
  *
@@ -26,6 +27,13 @@ public enum Direction {
 		}
 	}
 
+	/**
+	 * Method to parse string into a direction
+	 * 
+	 * @param direction string of the direction
+	 * @return the Direction Enum
+	 * @throws ParseException when invalid
+	 */
 	public static Direction parse(String direction) throws ParseException {
 		direction = direction.toLowerCase();
 

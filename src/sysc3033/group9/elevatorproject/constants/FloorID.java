@@ -1,5 +1,11 @@
 package sysc3033.group9.elevatorproject.constants;
 
+/**
+ * FloorID constants
+ * 
+ * @author Julian Mendoza
+ *
+ */
 public class FloorID {
 
 	public static final int ONE = 1;

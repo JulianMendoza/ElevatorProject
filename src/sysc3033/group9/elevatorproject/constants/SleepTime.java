@@ -1,8 +1,9 @@
 package sysc3033.group9.elevatorproject.constants;
 
 /**
+ * Thread Sleep Constants
  * 
- * @author 
+ * @author Julian Mendoza
  *
  */
 public class SleepTime {

@@ -1,6 +1,7 @@
 package sysc3033.group9.elevatorproject.constants.elevator;
 
 /**
+ * MotorStatus Enum UP DOWN and IDLE
  * 
  * @author Giuseppe Papalia
  *
@@ -8,9 +9,10 @@ package sysc3033.group9.elevatorproject.constants.elevator;
 public enum MotorStatus {
 
 	UP, DOWN, IDLE;
-	
+
+	@Override
 	public String toString() {
-		switch(this) {
+		switch (this) {
 		case IDLE:
 			return "Idle";
 		case DOWN:
@@ -19,10 +21,8 @@ public enum MotorStatus {
 			return "Up";
 		default:
 			return null;
-		
+
 		}
 	}
-	
-	
-	
+
 }
