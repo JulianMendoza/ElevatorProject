@@ -12,6 +12,7 @@ import sysc3033.group9.elevatorproject.elevator.Door;
 /**
  * @author Oluwafunbi Aboderin
  *
+ * 101019806
  */
 public class DoorTest {
 	
