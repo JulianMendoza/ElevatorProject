@@ -13,10 +13,18 @@ public class ButtonLamp {
 		isLit = false;
 	}
 
+	/**
+	 * Change the lamp status to the opposite of the current status
+	 */
 	public void switchStatus() {
 		isLit = !isLit;
 	}
 
+	/**
+	 * Whether the lamp is currently lit
+	 * 
+	 * @return
+	 */
 	public boolean isLit() {
 		return isLit;
 	}
