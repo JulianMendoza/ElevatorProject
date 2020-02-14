@@ -21,6 +21,7 @@ public class ElevatorSystem implements Runnable {
 	private int currentFloor;
 	private Elevator elevator;
 	private SystemView view;
+	private FloorEventQueue eventQueue;
 
 	/**
 	 * Default constructor
@@ -35,6 +36,7 @@ public class ElevatorSystem implements Runnable {
 		this.pipe = pipe;
 		this.isMoving = false;
 		this.view = view;
+		this.eventQueue = new FloorEventQueue(this);
 	}
 
 	@Override

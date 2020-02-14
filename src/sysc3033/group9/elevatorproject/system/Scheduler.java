@@ -8,8 +8,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
- * Scheduler Thread handles the communication between the elevator and floor
- * subsystem
+ * Scheduler Thread handles the communication between the elevator and floor subsystem
  * 
  * @author Julian Mendoza
  *
@@ -38,29 +37,20 @@ public class Scheduler implements Runnable {
 	 */
 	public void handleFloorEvent(FloorEvent e) {
 		/*
-		 * TODO process the event, create a queue to let the elevator know where to go
-		 * next logical flow: is elevator moving in the direction of the floor, is there
-		 * currently a queue etc
+		 * TODO process the event, create a queue to let the elevator know where to go next logical flow: is elevator moving in the direction of the floor, is there currently a queue etc
 		 */
 		int[] event = new int[] { e.getFloor(), e.getElevatorCarID() };
 		/*
-		 * if (elevatorQueue.isEmpty()) { elevatorQueue.add(floorMap); } else {
-		 * determinePositionInQueue(floorMap); }
+		 * if (elevatorQueue.isEmpty()) { elevatorQueue.add(floorMap); } else { determinePositionInQueue(floorMap); }
 		 */
 		elevatorQueue.add(e);
-		System.out.println(Thread.currentThread().getName() + " has received the signal.\nA user on floor #"
-				+ e.getFloor() + " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID()
-				+ "\nNotifying the elevator");
-		view.setText(view.getSchedulerText(),
-				Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor()
-						+ " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID()
-						+ "\nNotifying the elevator\n");
+		System.out.println(Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor() + " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID() + "\nNotifying the elevator");
+		view.setText(view.getSchedulerText(), Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor() + " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID() + "\nNotifying the elevator\n");
 		pipe.sendToElevator(event);
 	}
 
 	/*
-	 * private void determinePositionInQueue(Map.Entry<Integer, Integer> floorMap) {
-	 * if (!elevatorQueue.contains(floorMap)) {
+	 * private void determinePositionInQueue(Map.Entry<Integer, Integer> floorMap) { if (!elevatorQueue.contains(floorMap)) {
 	 * 
 	 * } }
 	 */
@@ -68,10 +58,8 @@ public class Scheduler implements Runnable {
 	 * Method to handle the elevator events
 	 */
 	public void handleElevatorEvent() {
-		System.out.println(Thread.currentThread().getName()
-				+ " has received elevators notifcation and is now notifying the floor");
-		view.setText(view.getSchedulerText(), Thread.currentThread().getName()
-				+ " has received elevators notifcation and is now notifying the floor\n");
+		System.out.println(Thread.currentThread().getName() + " has received elevators notifcation and is now notifying the floor");
+		view.setText(view.getSchedulerText(), Thread.currentThread().getName() + " has received elevators notifcation and is now notifying the floor\n");
 		pipe.setElevatorToScheduler(false);
 		pipe.schedulerToFloor();
 	}
