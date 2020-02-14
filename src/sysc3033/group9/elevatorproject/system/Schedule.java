@@ -23,7 +23,7 @@ public class Schedule {
 		return !toSchedule.isEmpty();
 	}
 
-	public synchronized void schedule(FloorEvent floorEvent) {
+	public synchronized void add(FloorEvent floorEvent) {
 		toSchedule.add(floorEvent);
 	}
 
