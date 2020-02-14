@@ -31,8 +31,9 @@ public class FloorEventQueue {
 
 	public synchronized List<FloorEvent> removePriorityEvents() {
 		List<FloorEvent> priorityEvents = new ArrayList<FloorEvent>();
-		for (List<FloorEvent> eventQueue : eventMap.values()) {
-			if (!eventQueue.isEmpty()) {
+		for (Elevator elevator : eventMap.keySet()) {
+			List<FloorEvent> eventQueue = eventMap.get(elevator);
+			if (!eventQueue.isEmpty() || !elevator.isBusy()) {
 				priorityEvents.add(eventQueue.remove(0));
 			}
 		}
@@ -45,15 +46,6 @@ public class FloorEventQueue {
 		eventQueue.add(e);
 		sortQueue(elevator, eventQueue);
 	}
-
-//	public synchronized FloorEvent remove(int elevatorCarID) {
-//		Elevator elevator = elevators.get(elevatorCarID);
-//		List<FloorEvent> eventQueue = eventMap.get(elevator);
-//		if (!eventQueue.isEmpty()) {
-//			return eventQueue.remove(0);
-//		}
-//		return null;
-//	}
 
 	private void sortQueue(Elevator elevator, List<FloorEvent> eventQueue) {
 		MotorStatus status = elevator.getMotor().getStatus();
