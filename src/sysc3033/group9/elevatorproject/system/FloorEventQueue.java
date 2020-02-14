@@ -47,7 +47,6 @@ public class FloorEventQueue {
 	private void sortQueue() {
 		MotorStatus status = elevatorSystem.getElevator().getMotor().getStatus();
 		int currentFloor = elevatorSystem.getCurrentFloor();
-
 		List<FloorEvent> eventQueueCopy = new LinkedList<FloorEvent>(eventQueue);
 		eventQueue.clear();
 		ElevatorSimulator simulator = new ElevatorSimulator(status, currentFloor);

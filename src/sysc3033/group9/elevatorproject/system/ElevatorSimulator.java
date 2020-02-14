@@ -24,8 +24,8 @@ public class ElevatorSimulator {
 
 	/**
 	 * Simulates and returns the next most logical event from a list of a events
-	 * <p>
-	 * Uses the current floor and motor status to compute the next most logical event
+	 * Uses the current floor and motor status to compute the next most logical
+	 * event
 	 * 
 	 * @param events - A list of arbitrary floor events
 	 * @return logicalEvent - The next most logical event
@@ -37,7 +37,8 @@ public class ElevatorSimulator {
 	}
 
 	/**
-	 * The motor status should already be correct so we simply need to update the floor
+	 * The motor status should already be correct so we simply need to update the
+	 * floor
 	 * 
 	 * @see updateLogicalEvent - for motor status updates
 	 * @param e - the event to be performed
@@ -51,7 +52,8 @@ public class ElevatorSimulator {
 	 * 
 	 * @param mostLogicalEvent - the current most logical event
 	 * @param events           - an arbitrary list of events
-	 * @param hasUpdated       - whether the most logical event has been updated beyond instantiation
+	 * @param hasUpdated       - whether the most logical event has been updated
+	 *                         beyond instantiation
 	 * @return mostLogicalEvent - the most logical event after computation
 	 */
 	private FloorEvent updateLogicalEvent(FloorEvent mostLogicalEvent, List<FloorEvent> events, boolean hasUpdated) {
@@ -91,7 +93,8 @@ public class ElevatorSimulator {
 			hasUpdated = true;
 			events.remove(mostLogicalEvent);
 			return updateLogicalEvent(mostLogicalEvent, events, hasUpdated);
-		} else if (!hasUpdated) { // there are no events to do along the way so we can switch the direction of the elevator and check again
+		} else if (!hasUpdated) { // there are no events to do along the way so we can switch the direction of the
+									// elevator and check again
 			if (motorStatus.equals(MotorStatus.UP)) {
 				motorStatus = MotorStatus.DOWN;
 			} else if (motorStatus.equals(MotorStatus.DOWN)) {
