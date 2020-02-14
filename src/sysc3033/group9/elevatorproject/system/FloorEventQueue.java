@@ -33,7 +33,7 @@ public class FloorEventQueue {
 		List<FloorEvent> priorityEvents = new ArrayList<FloorEvent>();
 		for (Elevator elevator : eventMap.keySet()) {
 			List<FloorEvent> eventQueue = eventMap.get(elevator);
-			if (!eventQueue.isEmpty() || !elevator.isBusy()) {
+			if (!eventQueue.isEmpty() && !elevator.isBusy()) {
 				priorityEvents.add(eventQueue.remove(0));
 			}
 		}
