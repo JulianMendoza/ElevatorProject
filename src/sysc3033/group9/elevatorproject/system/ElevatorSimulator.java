@@ -16,30 +16,30 @@ public class ElevatorSimulator {
 	}
 
 	public FloorEvent simulateLogicalEvent(List<FloorEvent> events) {
-		FloorEvent logicalEvent = getLogicalEvent(events.remove(0), events);
+		FloorEvent logicalEvent = getLogicalEvent(events.remove(0), events, 0);
 		doEvent(logicalEvent);
 		return logicalEvent;
 	}
 
 	private void doEvent(FloorEvent e) {
-
+		currentFloor = e.getFloor();
 	}
 
-	private FloorEvent getLogicalEvent(FloorEvent logicalEvent, List<FloorEvent> events) {
-		boolean updatedEvent = false;
+	private FloorEvent getLogicalEvent(FloorEvent mostLogicalEvent, List<FloorEvent> events, int updateCount) {
 
+		boolean updatedEvent = false;
 		if (motorStatus.equals(MotorStatus.UP)) {
 			for (FloorEvent e : events) { // check for stops up along the way
-				if (e.getFloor() > currentFloor && e.getFloor() < logicalEvent.getFloor()) {
-					logicalEvent = e;
+				if (e.getFloor() > currentFloor && e.getFloor() < mostLogicalEvent.getFloor()) {
+					mostLogicalEvent = e;
 					updatedEvent = true;
 					continue;
 				}
 			}
 		} else if (motorStatus.equals(MotorStatus.DOWN)) { // check for stops down along the way
 			for (FloorEvent e : events) {
-				if (e.getFloor() < currentFloor && e.getFloor() > logicalEvent.getFloor()) {
-					logicalEvent = e;
+				if (e.getFloor() < currentFloor && e.getFloor() > mostLogicalEvent.getFloor()) {
+					mostLogicalEvent = e;
 					updatedEvent = true;
 					continue;
 				}
@@ -47,7 +47,7 @@ public class ElevatorSimulator {
 		} else {
 			for (FloorEvent e : events) { // check for closest stop as it's idle
 				if (Math.abs(currentFloor - e.getFloor()) < Math.abs(currentFloor - e.getFloor())) {
-					logicalEvent = e;
+					mostLogicalEvent = e;
 					updatedEvent = true;
 					continue;
 				}
@@ -55,18 +55,22 @@ public class ElevatorSimulator {
 		}
 
 		if (updatedEvent) {
-			events.remove(logicalEvent);
-			return getLogicalEvent(logicalEvent, events);
-		} else if (logicalEvent == null) {
+			updateCount++;
+		}
+
+		if (updatedEvent) {
+			events.remove(mostLogicalEvent);
+			return getLogicalEvent(mostLogicalEvent, events, updateCount);
+		} else if (updateCount == 0) {
 			if (motorStatus.equals(MotorStatus.UP)) {
 				motorStatus = MotorStatus.DOWN;
 			} else if (motorStatus.equals(MotorStatus.DOWN)) {
 				motorStatus = MotorStatus.UP;
 			}
-			return getLogicalEvent(logicalEvent, events);
+			return getLogicalEvent(mostLogicalEvent, events, updateCount);
 		} else {
 
-			return logicalEvent;
+			return mostLogicalEvent;
 		}
 	}
 
