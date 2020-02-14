@@ -100,10 +100,9 @@ public class ElevatorSimulator {
 			} else if (motorStatus.equals(MotorStatus.DOWN)) {
 				motorStatus = MotorStatus.UP;
 			}
-			return updateLogicalEvent(mostLogicalEvent, events, hasUpdated);
-		} else { // we have computed the most logical event
 			return mostLogicalEvent;
 		}
+		return mostLogicalEvent;
 	}
 
 }

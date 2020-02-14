@@ -1,7 +1,5 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.ArrayList;
-
 import sysc3033.group9.elevatorproject.GUI.SystemView;
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
@@ -16,7 +14,7 @@ import sysc3033.group9.elevatorproject.util.Sleeper;
  */
 public class Scheduler implements Runnable {
 	private CommunicationPipe pipe;
-	private ArrayList<FloorEvent> elevatorQueue;
+	private FloorEventQueue eventQueue;
 	private SystemView view;
 
 	/**
@@ -25,10 +23,10 @@ public class Scheduler implements Runnable {
 	 * @param pipe The communication pipe
 	 * @param view GUI view
 	 */
-	public Scheduler(CommunicationPipe pipe, SystemView view) {
+	public Scheduler(FloorEventQueue eventQueue, CommunicationPipe pipe, SystemView view) {
+		this.eventQueue = eventQueue;
 		this.pipe = pipe;
 		this.view = view;
-		elevatorQueue = new ArrayList<FloorEvent>();
 	}
 
 	/**
@@ -38,12 +36,12 @@ public class Scheduler implements Runnable {
 	 */
 	public void handleFloorEvent(FloorEvent e) {
 		int[] event = new int[] { e.getFloor(), e.getElevatorCarID() };
-		elevatorQueue.add(e);
+		eventQueue.add(e);
 		view.setText(view.getSchedulerText(),
 				Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor()
 						+ " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID()
 						+ "\nNotifying the elevator\n");
-		pipe.sendToElevator(event);
+		pipe.sendToElevator(eventQueue.getQueue());
 	}
 
 	/**

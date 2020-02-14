@@ -44,6 +44,10 @@ public class FloorEventQueue {
 		return eventQueue.isEmpty();
 	}
 
+	public List<FloorEvent> getQueue() {
+		return eventQueue;
+	}
+
 	private void sortQueue() {
 		MotorStatus status = elevatorSystem.getElevator().getMotor().getStatus();
 		int currentFloor = elevatorSystem.getCurrentFloor();

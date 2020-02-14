@@ -1,6 +1,5 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import sysc3033.group9.elevatorproject.event.FloorEvent;
@@ -15,7 +14,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToScheduler, schedulerToElevator;
 	private FloorEvent generatedEvent;
-	private List<int[]> nextInQueue;
+	private List<FloorEvent> eventQueue;
 
 	/**
 	 * Default constructor
@@ -25,7 +24,6 @@ public class CommunicationPipe {
 		schedulerToFloor = false;
 		elevatorToScheduler = false;
 		schedulerToElevator = false;
-		nextInQueue = new ArrayList<int[]>();
 	}
 
 	/**
@@ -56,8 +54,8 @@ public class CommunicationPipe {
 	 * @TODO implement semaphore so multiple events can be handled simultaneously
 	 *       and not depend on the pipe
 	 */
-	public synchronized void sendToElevator(int[] map) {
-		nextInQueue.add(map);
+	public synchronized void sendToElevator(List<FloorEvent> eventQueue) {
+		this.eventQueue = eventQueue;
 		floorToScheduler = false;
 		while (schedulerToElevator) {
 			try {
@@ -118,7 +116,7 @@ public class CommunicationPipe {
 		floorToScheduler = event;
 	}
 
-	public int[] getNextInQueue() {
-		return nextInQueue.remove(0);
+	public List<FloorEvent> getEventQueue() {
+		return eventQueue;
 	}
 }
