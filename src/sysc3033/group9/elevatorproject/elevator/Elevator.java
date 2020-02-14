@@ -19,6 +19,9 @@ public class Elevator {
 	private List<ElevatorButton> buttons;
 	private Motor motor;
 	private Door door;
+	private int currentFloor;
+	private boolean isLoaded;
+	private boolean isBusy;
 
 	/**
 	 * Default constructor
@@ -35,8 +38,10 @@ public class Elevator {
 	 * @param floorSpan
 	 */
 	private void createElevator(FloorSpan floorSpan) {
+		isLoaded = false;
 		motor = new Motor(MotorStatus.IDLE);
 		door = new Door(DoorStatus.CLOSED);
+		currentFloor = floorSpan.getMinFloorID();
 		buttons = new ArrayList<ElevatorButton>();
 		for (int i = floorSpan.getMinFloorID(); i <= floorSpan.getMaxFloorID(); i++) {
 			buttons.add(new ElevatorButton(i));
@@ -60,6 +65,20 @@ public class Elevator {
 		}
 	}
 
+	public void incrementFloor() {
+		switch (motor.getStatus()) {
+		case DOWN:
+			currentFloor--;
+		case IDLE:
+			break;
+		case UP:
+			currentFloor++;
+		default:
+			break;
+
+		}
+	}
+
 	/*
 	 * getters door and motor
 	 */
@@ -69,5 +88,25 @@ public class Elevator {
 
 	public Motor getMotor() {
 		return motor;
+	}
+
+	public int getCurrentFloor() {
+		return currentFloor;
+	}
+
+	public synchronized boolean isLoaded() {
+		return isLoaded;
+	}
+
+	public synchronized void setLoaded(boolean isLoaded) {
+		this.isLoaded = isLoaded;
+	}
+
+	public synchronized boolean isBusy() {
+		return isBusy;
+	}
+
+	public synchronized void setBusy(boolean isBusy) {
+		this.isBusy = isBusy;
 	}
 }

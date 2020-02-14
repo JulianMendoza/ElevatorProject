@@ -3,7 +3,6 @@ package sysc3033.group9.elevatorproject.system;
 import java.util.LinkedList;
 import java.util.List;
 
-import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 /**
@@ -49,16 +48,16 @@ public class FloorEventQueue {
 	}
 
 	private void sortQueue() {
-		MotorStatus status = elevatorSystem.getElevator().getMotor().getStatus();
-		int currentFloor = elevatorSystem.getCurrentFloor();
-		List<FloorEvent> eventQueueCopy = new LinkedList<FloorEvent>(eventQueue);
-		eventQueue.clear();
-		ElevatorSimulator simulator = new ElevatorSimulator(status, currentFloor);
-		while (!eventQueueCopy.isEmpty()) {
-			FloorEvent nextLogicalEvent = simulator.simulateLogicalEvent(eventQueueCopy);
-			eventQueue.add(nextLogicalEvent);
-			eventQueueCopy.remove(nextLogicalEvent);
-		}
+//		MotorStatus status = elevatorSystem.getElevator().getMotor().getStatus();
+//		int currentFloor = elevatorSystem.getCurrentFloor();
+//		List<FloorEvent> eventQueueCopy = new LinkedList<FloorEvent>(eventQueue);
+//		eventQueue.clear();
+//		ElevatorSimulator simulator = new ElevatorSimulator(status, currentFloor);
+//		while (!eventQueueCopy.isEmpty()) {
+//			FloorEvent nextLogicalEvent = simulator.simulateLogicalEvent(eventQueueCopy);
+//			eventQueue.add(nextLogicalEvent);
+//			eventQueueCopy.remove(nextLogicalEvent);
+//		}
 
 	}
 
