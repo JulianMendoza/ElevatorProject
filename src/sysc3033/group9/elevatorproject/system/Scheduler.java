@@ -1,13 +1,18 @@
 package sysc3033.group9.elevatorproject.system;
 
+import sysc3033.group9.elevatorproject.constants.SleepTime;
+import sysc3033.group9.elevatorproject.event.FloorEvent;
+import sysc3033.group9.elevatorproject.util.Sleeper;
+
 /**
  * Scheduler Thread handles the communication between the elevator and floor subsystem
  * 
- * @author Julian Mendoza
+ * @author Julian Mendoza, Giuseppe Papalia
  *
  */
 public class Scheduler implements Runnable {
 	private ElevatorSystem elevatorSystem;
+	private Schedule schedule;
 
 	/**
 	 * Default constructor of the Scheduler
@@ -17,13 +22,24 @@ public class Scheduler implements Runnable {
 	 */
 	public Scheduler(Schedule schedule, ElevatorSystem elevatorSystem) {
 		this.elevatorSystem = elevatorSystem;
+		this.schedule = new Schedule();
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-
+			if (schedule.hasEvents()) {
+				scheduleEvent(schedule.getEvent());
+			}
+			Sleeper.sleep(SleepTime.DEFAULT);
 		}
 	}
 
+	public void scheduleEvent(FloorEvent e) {
+		if (e.getElevatorCarID() == -1) {
+			// Compute the fastest car
+		} else {
+			elevatorSystem.scheduleEvent(e);
+		}
+	}
 }

@@ -1,9 +1,15 @@
 package sysc3033.group9.elevatorproject.system;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
+import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
+import sysc3033.group9.elevatorproject.elevator.Elevator;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
+import sysc3033.group9.elevatorproject.simulate.ElevatorSimulator;
 
 /**
  * 
@@ -12,52 +18,54 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
  */
 public class FloorEventQueue {
 
-	List<FloorEvent> eventQueue;
-	private ElevatorSystem elevatorSystem;
+	Map<Integer, Elevator> elevators;
+	Map<Elevator, List<FloorEvent>> eventMap;;
 
-	public FloorEventQueue(ElevatorSystem elevatorSystem) {
-		this.elevatorSystem = elevatorSystem;
-		eventQueue = new LinkedList<FloorEvent>();
+	public FloorEventQueue(Map<Integer, Elevator> elevators) {
+		this.elevators = elevators;
+		eventMap = new HashMap<Elevator, List<FloorEvent>>();
+		for (Elevator e : elevators.values()) {
+			eventMap.put(e, new LinkedList<FloorEvent>());
+		}
+	}
+
+	public synchronized List<FloorEvent> removePriorityEvents() {
+		List<FloorEvent> priorityEvents = new ArrayList<FloorEvent>();
+		for (List<FloorEvent> eventQueue : eventMap.values()) {
+			if (!eventQueue.isEmpty()) {
+				priorityEvents.add(eventQueue.remove(0));
+			}
+		}
+		return priorityEvents;
 	}
 
 	public synchronized void add(FloorEvent e) {
+		Elevator elevator = elevators.get(e.getElevatorCarID());
+		List<FloorEvent> eventQueue = eventMap.get(elevator);
 		eventQueue.add(e);
-		sortQueue();
+		sortQueue(elevator, eventQueue);
 	}
 
-	public synchronized FloorEvent peek() {
-		if (!eventQueue.isEmpty()) {
-			return eventQueue.get(0);
-		}
-		return null;
-	}
-
-	public synchronized FloorEvent remove() {
-		if (!isEmpty()) {
-			return eventQueue.remove(0);
-		}
-		return null;
-	}
-
-	public boolean isEmpty() {
-		return eventQueue.isEmpty();
-	}
-
-	public List<FloorEvent> getQueue() {
-		return eventQueue;
-	}
-
-	private void sortQueue() {
-//		MotorStatus status = elevatorSystem.getElevator().getMotor().getStatus();
-//		int currentFloor = elevatorSystem.getCurrentFloor();
-//		List<FloorEvent> eventQueueCopy = new LinkedList<FloorEvent>(eventQueue);
-//		eventQueue.clear();
-//		ElevatorSimulator simulator = new ElevatorSimulator(status, currentFloor);
-//		while (!eventQueueCopy.isEmpty()) {
-//			FloorEvent nextLogicalEvent = simulator.simulateLogicalEvent(eventQueueCopy);
-//			eventQueue.add(nextLogicalEvent);
-//			eventQueueCopy.remove(nextLogicalEvent);
+//	public synchronized FloorEvent remove(int elevatorCarID) {
+//		Elevator elevator = elevators.get(elevatorCarID);
+//		List<FloorEvent> eventQueue = eventMap.get(elevator);
+//		if (!eventQueue.isEmpty()) {
+//			return eventQueue.remove(0);
 //		}
+//		return null;
+//	}
+
+	private void sortQueue(Elevator elevator, List<FloorEvent> eventQueue) {
+		MotorStatus status = elevator.getMotor().getStatus();
+		int currentFloor = elevator.getCurrentFloor();
+		List<FloorEvent> eventQueueCopy = new LinkedList<FloorEvent>(eventQueue);
+		eventQueue.clear();
+		ElevatorSimulator simulator = new ElevatorSimulator(status, currentFloor);
+		while (!eventQueueCopy.isEmpty()) {
+			FloorEvent nextLogicalEvent = simulator.simulateLogicalEvent(eventQueueCopy);
+			eventQueue.add(nextLogicalEvent);
+			eventQueueCopy.remove(nextLogicalEvent);
+		}
 
 	}
 

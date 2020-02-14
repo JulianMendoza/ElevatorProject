@@ -1,4 +1,4 @@
-package sysc3033.group9.elevatorproject.system;
+package sysc3033.group9.elevatorproject.simulate;
 
 import java.util.LinkedList;
 import java.util.List;

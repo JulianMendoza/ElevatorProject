@@ -52,7 +52,7 @@ public class FloorSystem implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-
+			// poll event file for new events
 		}
 	}
 }

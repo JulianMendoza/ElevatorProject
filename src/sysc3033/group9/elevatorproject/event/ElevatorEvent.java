@@ -1,4 +1,4 @@
-package sysc3033.group9.elevatorproject.system;
+package sysc3033.group9.elevatorproject.event;
 
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
@@ -6,6 +6,11 @@ import sysc3033.group9.elevatorproject.elevator.Elevator;
 import sysc3033.group9.elevatorproject.util.Sleeper;
 import sysc3033.group9.elevatorproject.util.TimedCondition;
 
+/**
+ * 
+ * @author Giuseppe Papalia
+ *
+ */
 public class ElevatorEvent implements Runnable {
 
 	private int targetFloor;

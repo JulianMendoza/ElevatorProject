@@ -15,7 +15,7 @@ public final class ElevatorButton extends Button {
 	/**
 	 * Default constructor
 	 * 
-	 * @param targetFloor an integer where the floor will goo
+	 * @param targetFloor an integer where the floor will go
 	 */
 	public ElevatorButton(int targetFloor) {
 		super();

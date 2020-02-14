@@ -3,9 +3,12 @@ package sysc3033.group9.elevatorproject.system;
 import java.util.HashMap;
 import java.util.Map;
 
+import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.elevator.Elevator;
+import sysc3033.group9.elevatorproject.event.ElevatorEvent;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
+import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
  * ElevatorSystem thread Handles events that the elevators must process
@@ -16,6 +19,7 @@ import sysc3033.group9.elevatorproject.floor.FloorSpan;
 public class ElevatorSystem implements Runnable {
 
 	Map<Integer, Elevator> elevators;
+	FloorEventQueue eventQueue;
 
 	/**
 	 * Default constructor
@@ -29,20 +33,24 @@ public class ElevatorSystem implements Runnable {
 		for (int i = 0; i < numElevators; i++) {
 			elevators.put(i, new Elevator(floorSpan));
 		}
+		eventQueue = new FloorEventQueue(elevators);
 	}
 
 	@Override
 	public void run() {
 		while (true) {
-			// make these elevators MOVE baby
+			for (FloorEvent e : eventQueue.removePriorityEvents()) {
+				handleFloorEvent(e);
+			}
+			Sleeper.sleep(SleepTime.DEFAULT);
 		}
 	}
 
-	public boolean isBusy(int elevatorCarID) {
-		return elevators.get(elevatorCarID).isBusy();
+	public synchronized void scheduleEvent(FloorEvent e) {
+		eventQueue.add(e);
 	}
 
-	public void handleFloorEvent(FloorEvent e) {
+	private void handleFloorEvent(FloorEvent e) {
 		ElevatorEvent e2 = createElevatorEvent(e);
 		dispatchElevatorEvent(e2);
 	}
