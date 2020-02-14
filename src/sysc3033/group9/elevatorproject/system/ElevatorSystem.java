@@ -1,10 +1,10 @@
 package sysc3033.group9.elevatorproject.system;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import sysc3033.group9.elevatorproject.GUI.SystemView;
-import sysc3033.group9.elevatorproject.constants.Direction;
 import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 import sysc3033.group9.elevatorproject.elevator.Elevator;
@@ -25,7 +25,8 @@ public class ElevatorSystem implements Runnable {
 	private Elevator elevator;
 	private SystemView view;
 	private List<FloorEvent> eventQueue;
-	private ArrayList<Integer> stops;
+	private ArrayList<Integer> stops, stops2; // stops 1 will be the stops on the to the threshold
+	// stops 2 will be the stops on the way down
 
 	/**
 	 * Default constructor
@@ -41,6 +42,7 @@ public class ElevatorSystem implements Runnable {
 		this.isMoving = false;
 		this.view = view;
 		this.stops = new ArrayList<Integer>();
+		this.stops2 = new ArrayList<Integer>();
 		this.floorThreshold = -1;
 	}
 
@@ -50,7 +52,11 @@ public class ElevatorSystem implements Runnable {
 			if (pipe.isSchedulerToElevator()) {
 				handleElevatorEvent();
 			} else if (isMoving) {
-				handleMove();
+				if (currentFloor != floorThreshold) {
+					handleMove();
+				} else {
+					isMoving = !isMoving;
+				}
 			} else {
 				view.setQueue(view.getQueueText(), "NONE IN QUEUE");
 			}
@@ -64,16 +70,20 @@ public class ElevatorSystem implements Runnable {
 	private void handleElevatorEvent() {
 		view.setText(view.getElevatorText(),
 				Thread.currentThread().getName() + " has received the signal about a new event.\n");
-		if (eventQueue == null) {
-			this.eventQueue = pipe.getEventQueue();
+		this.eventQueue = pipe.getEventQueue();
+		int i = 0;
+		for (FloorEvent e : eventQueue) {
+			System.out.println(e.toString() + " " + i);
+			i++;
 		}
 		MotorStatus status = elevator.getMotor().getStatus();
-		if (status.equals(MotorStatus.IDLE)) {
+		if (!isMoving) {
 			FloorEvent e = eventQueue.remove(0);
-			setStatus(e);
 			floorThreshold = e.getFloor();
-			addStops(e);
+			stops.add(floorThreshold);
+			stops2.add(e.getElevatorCarID());
 			isMoving = true;
+			setStatus(e);
 		} else {
 			FloorEvent e = eventQueue.get(0);
 			int check = e.getElevatorCarID() - e.getFloor();
@@ -115,67 +125,40 @@ public class ElevatorSystem implements Runnable {
 		MotorStatus motorStatus = elevator.getMotor().getStatus();
 		Sleeper.sleep(SleepTime.FLOOR);
 		String str = "";
-		if (motorStatus.equals(MotorStatus.UP)) {
-			currentFloor++;
-			str += "The Elevator has moved up to floor " + currentFloor;
-		} else {
-			currentFloor--;
-			str += "The Elevator has moved down to floor " + currentFloor;
-		}
-		if (stops.contains(currentFloor)) {
-			int index = stops.indexOf(currentFloor);
-			stops.remove(index);
-			if (currentFloor == floorThreshold) {
-				elevator.getMotor().setStatus(MotorStatus.IDLE);
-			}
-			promptDoor();
-		}
-		view.setText(view.getDisplayText(), currentFloor + " " + motorStatus + "\n");
-		announce(str);
-		/*
-		 * int[] moveEvent = pipe.getNextInQueue(); //
-		 * view.setQueue(view.getQueueText(), "[ " + moveEvent[0] + " , " + moveEvent[1]
-		 * // + " ]"); if ((moveEvent[0] - currentFloor) != 0) { if ((moveEvent[0] -
-		 * currentFloor) > 0) { elevatorMotor.setStatus(MotorStatus.UP);
-		 * move(Direction.UP, moveEvent[0] - currentFloor); } else {
-		 * elevatorMotor.setStatus(MotorStatus.DOWN); move(Direction.DOWN, currentFloor
-		 * - moveEvent[0]); } } if ((moveEvent[1] - currentFloor) > 0) {
-		 * elevatorMotor.setStatus(MotorStatus.UP); move(Direction.UP, moveEvent[1] -
-		 * currentFloor); } else { elevatorMotor.setStatus(MotorStatus.DOWN);
-		 * move(Direction.DOWN, currentFloor - moveEvent[1]); }
-		 * elevatorMotor.setStatus(MotorStatus.IDLE); isMoving = false;
-		 */
-	}
-
-	private void promptDoor() {
-		view.setText(view.getElevatorText(), "The Elevator has reached the Floor!\nOpening the door...\n");
-		Sleeper.sleep(SleepTime.LOAD);
-		view.setText(view.getElevatorText(), "DOOR OPENED!\nClosing the door...\n");
-		Sleeper.sleep(SleepTime.LOAD);
-		view.setText(view.getElevatorText(), "DOOR CLOSED!\n");
-	}
-
-	/**
-	 * Helper function to move the elevators
-	 * 
-	 * @param direction The direction of the elevator
-	 * @param steps     The amount of floors the elevator must move
-	 */
-	@Deprecated
-	private void move(Direction direction, int steps) {
-		for (int i = 0; i < steps; i++) {
-			Sleeper.sleep(SleepTime.FLOOR);
-			String str = "";
-			if (direction.equals(Direction.UP)) {
+		if (!motorStatus.equals(MotorStatus.IDLE)) {
+			if (motorStatus.equals(MotorStatus.UP)) {
 				currentFloor++;
 				str += "The Elevator has moved up to floor " + currentFloor;
 			} else {
 				currentFloor--;
 				str += "The Elevator has moved down to floor " + currentFloor;
 			}
-			view.setText(view.getDisplayText(), currentFloor + " " + direction + "\n");
-			announce(str);
 		}
+		if (stops.contains(currentFloor)) {
+			int index = stops.indexOf(currentFloor);
+			stops.remove(index);
+			if (currentFloor == floorThreshold) {
+				Collections.sort(stops);
+				if (motorStatus.equals(MotorStatus.UP)) {
+					floorThreshold = stops2.remove(0);
+				} else if (motorStatus.equals(MotorStatus.DOWN)) {
+					floorThreshold = stops2.remove(stops.size() - 1);
+				} else {
+					floorThreshold = stops2.remove(0);
+				}
+				if (floorThreshold - currentFloor > 0) {
+					elevator.getMotor().setStatus(MotorStatus.UP);
+				} else {
+					elevator.getMotor().setStatus(MotorStatus.DOWN);
+				}
+			}
+			promptDoor();
+		}
+		view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
+		announce(str);
+	}
+
+	private void promptDoor() {
 		view.setText(view.getElevatorText(), "The Elevator has reached the Floor!\nOpening the door...\n");
 		Sleeper.sleep(SleepTime.LOAD);
 		view.setText(view.getElevatorText(), "DOOR OPENED!\nClosing the door...\n");

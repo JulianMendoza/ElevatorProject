@@ -57,13 +57,6 @@ public class CommunicationPipe {
 	public synchronized void sendToElevator(List<FloorEvent> eventQueue) {
 		this.eventQueue = eventQueue;
 		floorToScheduler = false;
-		while (schedulerToElevator) {
-			try {
-				wait();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
 		schedulerToElevator = true;
 		notifyAll();
 	}
