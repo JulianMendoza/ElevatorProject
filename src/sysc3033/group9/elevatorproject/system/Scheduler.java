@@ -35,7 +35,6 @@ public class Scheduler implements Runnable {
 	 * @param e the FloorEvent passed
 	 */
 	public void handleFloorEvent(FloorEvent e) {
-		int[] event = new int[] { e.getFloor(), e.getElevatorCarID() };
 		eventQueue.add(e);
 		view.setText(view.getSchedulerText(),
 				Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor()
