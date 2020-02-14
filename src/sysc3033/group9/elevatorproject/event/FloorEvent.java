@@ -12,7 +12,8 @@ import sysc3033.group9.elevatorproject.util.Time;
 /**
  * FloorEvent class generates a new random floor event for the elevator
  * 
- * @author Giuseppe Papalia, Kelly Harrison
+ * @author Giuseppe Papalia
+ * @documentation Kelly Harrison
  *
  */
 public class FloorEvent {
@@ -76,8 +77,7 @@ public class FloorEvent {
 	}
 
 	/**
-	 * Creates a new floor event within the elevator floor maximum and minimum
-	 * values
+	 * Creates a new floor event within the elevator floor maximum and minimum values
 	 */
 	private void createNewEvent() {
 		try {
