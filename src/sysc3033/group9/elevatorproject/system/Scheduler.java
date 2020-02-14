@@ -22,7 +22,7 @@ public class Scheduler implements Runnable {
 	 */
 	public Scheduler(Schedule schedule, ElevatorSystem elevatorSystem) {
 		this.elevatorSystem = elevatorSystem;
-		this.schedule = new Schedule();
+		this.schedule = schedule;
 	}
 
 	@Override
