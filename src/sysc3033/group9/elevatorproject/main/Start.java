@@ -39,7 +39,7 @@ public class Start {
 			new FloorEvent();
 			view.setText(view.getEventPanelText(), "EVENT" + 1 + ":"
 					+ Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()).toString() + "\n");
-			Sleeper.sleep(new Random().nextInt((300 - 200) + 1) + 200);
+			Sleeper.sleep(new Random().nextInt((6000 - 200) + 1) + 200);
 		}
 	}
 }

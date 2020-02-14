@@ -151,8 +151,8 @@ public class ElevatorSystem implements Runnable {
 				} else {
 					elevator.getMotor().setStatus(MotorStatus.DOWN);
 				}
+				promptDoor();
 			}
-			promptDoor();
 		}
 		view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
 		announce(str);
