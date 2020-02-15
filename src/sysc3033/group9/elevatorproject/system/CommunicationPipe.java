@@ -13,6 +13,7 @@ public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToScheduler, schedulerToElevator;
 	private FloorEvent generatedEvent;
 	private FloorEvent event;
+	private String displayLamp;
 
 	/**
 	 * Default constructor
@@ -78,6 +79,14 @@ public class CommunicationPipe {
 	/*
 	 * Getters and Setters for private variables
 	 */
+	public void setLamp(String msg) {
+		displayLamp = msg;
+	}
+
+	public String getLamp() {
+		return displayLamp;
+	}
+
 	public boolean isFloorToScheduler() {
 		return floorToScheduler;
 	}

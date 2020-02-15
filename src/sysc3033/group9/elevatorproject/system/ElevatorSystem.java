@@ -89,6 +89,11 @@ public class ElevatorSystem implements Runnable {
 		pipe.setSchedulerToElevator(false);
 	}
 
+	/**
+	 * Method to set the elevator status if it is not moving
+	 * 
+	 * @param e The floor event
+	 */
 	private void setInitialStatus(FloorEvent e) {
 		if (e.getFloor() - currentFloor > 0) {
 			elevator.getMotor().setStatus(MotorStatus.UP);
@@ -104,7 +109,7 @@ public class ElevatorSystem implements Runnable {
 		MotorStatus motorStatus = elevator.getMotor().getStatus();
 		Sleeper.sleep(SleepTime.FLOOR);
 		String str = "";
-		if (!motorStatus.equals(MotorStatus.IDLE)) {
+		if (!motorStatus.equals(MotorStatus.IDLE)) { // Idle if the event occurs on the current floor bug prone
 			if (motorStatus.equals(MotorStatus.UP)) {
 				currentFloor++;
 				str += "The Elevator has moved up to floor " + currentFloor;
@@ -112,21 +117,23 @@ public class ElevatorSystem implements Runnable {
 				currentFloor--;
 				str += "The Elevator has moved down to floor " + currentFloor;
 			}
-			view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
-			announce(str);
+			// view.setText(view.getDisplayText(), currentFloor + " " +
+			// elevator.getMotor().getStatus() + "\n");
+			announce(str, currentFloor + " " + elevator.getMotor().getStatus() + "\n");
 		} else {
 			promptDoor();
 		}
-		if (takingRequests && requests.contains(currentFloor)) {
-			requests.remove(0);
+		if (takingRequests && requests.contains(currentFloor)) { // a floor has been reached where a pickup is required
+			requests.remove(0); // bug if the current floor is not the first in the queue lol
 			if (requests.isEmpty()) {
 				takingRequests = false;
 				takingDesignations = true;
 			}
 			promptDoor();
+			// determine the status based off of where to go next
 			MotorStatus newStatus = (designations.peek() - currentFloor > 0) ? MotorStatus.UP : MotorStatus.DOWN;
 			elevator.getMotor().setStatus(newStatus);
-		} else if (takingDesignations && designations.contains(currentFloor)) {
+		} else if (takingDesignations && designations.contains(currentFloor)) { // same as above but for designations
 			designations.remove(0);
 			if (designations.isEmpty()) {
 				takingDesignations = false;
@@ -144,6 +151,9 @@ public class ElevatorSystem implements Runnable {
 
 	}
 
+	/**
+	 * Helper method to prompt the doors once a floor has been reached
+	 */
 	private void promptDoor() {
 		view.setText(view.getElevatorText(), "The Elevator has reached the Floor!\nOpening the door...\n");
 		Sleeper.sleep(SleepTime.LOAD);
@@ -157,10 +167,11 @@ public class ElevatorSystem implements Runnable {
 	 * 
 	 * @param msg the message to be announced as a string
 	 */
-	private void announce(String msg) {
+	private void announce(String msg, String displayLamp) {
 		view.setText(view.getElevatorText(),
 				msg + "\n" + Thread.currentThread().getName() + " has signaled the lamps to the Scheduler.\n");
 		pipe.elevatorToScheduler();
+		pipe.setLamp(displayLamp);
 	}
 
 	public int getCurrentFloor() {
