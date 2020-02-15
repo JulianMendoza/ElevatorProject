@@ -35,7 +35,7 @@ public class Start {
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 2; i++) {
 			new FloorEvent();
 			view.setText(view.getEventPanelText(), "EVENT" + 1 + ":"
 					+ Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()).toString() + "\n");

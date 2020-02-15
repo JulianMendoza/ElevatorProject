@@ -133,6 +133,8 @@ public class ElevatorSystem implements Runnable {
 				currentFloor--;
 				str += "The Elevator has moved down to floor " + currentFloor;
 			}
+			view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
+			announce(str);
 		}
 		if (stops.contains(currentFloor)) {
 			int index = stops.indexOf(currentFloor);
@@ -151,11 +153,14 @@ public class ElevatorSystem implements Runnable {
 				} else {
 					elevator.getMotor().setStatus(MotorStatus.DOWN);
 				}
-				promptDoor();
 			}
+			promptDoor();
 		}
-		view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
-		announce(str);
+		if (currentFloor == floorThreshold) {
+			promptDoor();
+			elevator.getMotor().setStatus(MotorStatus.IDLE);
+		}
+
 	}
 
 	private void promptDoor() {
