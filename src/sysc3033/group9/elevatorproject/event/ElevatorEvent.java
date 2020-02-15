@@ -65,18 +65,24 @@ public class ElevatorEvent implements Runnable {
 			Sleeper.sleep(SleepTime.FLOOR);
 			elevator.incrementFloor();
 			// ELEVATOR NOW AT X FLOOR
+			System.out.println("Elevator is now at floor #" + elevator.getCurrentFloor());
 		}
 	}
 
 	private void loadElevator() {
 		// OPENING DOOR
+		System.out.println("Elevator door is opening!");
 		Sleeper.sleep(SleepTime.OPEN_DOOR);
 		// DOOR OPEN
+		System.out.println("Elevator door has opened!");
 		elevator.getDoor().switchStatus();
 		// LOAD AND CLOSE
+		System.out.println("Elevator is being loaded!");
 		Sleeper.sleep(SleepTime.LOAD_AND_CLOSE);
+		System.out.println("Elevator is has closed!!");
 		elevator.getDoor().switchStatus();
 		// ELEVATOR LOADED
+		System.out.println("Elevator has been loaded!!");
 	}
 
 }
