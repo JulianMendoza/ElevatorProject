@@ -1,7 +1,5 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.List;
-
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 /**
@@ -14,7 +12,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class CommunicationPipe {
 	private boolean floorToScheduler, schedulerToFloor, elevatorToScheduler, schedulerToElevator;
 	private FloorEvent generatedEvent;
-	private List<FloorEvent> eventQueue;
+	private FloorEvent event;
 
 	/**
 	 * Default constructor
@@ -54,8 +52,8 @@ public class CommunicationPipe {
 	 * @TODO implement semaphore so multiple events can be handled simultaneously
 	 *       and not depend on the pipe
 	 */
-	public synchronized void sendToElevator(List<FloorEvent> eventQueue) {
-		this.eventQueue = eventQueue;
+	public synchronized void sendToElevator(FloorEvent event) {
+		this.event = event;
 		floorToScheduler = false;
 		while (schedulerToElevator) {
 			try {
@@ -116,7 +114,7 @@ public class CommunicationPipe {
 		floorToScheduler = event;
 	}
 
-	public List<FloorEvent> getEventQueue() {
-		return eventQueue;
+	public FloorEvent getEvent() {
+		return event;
 	}
 }

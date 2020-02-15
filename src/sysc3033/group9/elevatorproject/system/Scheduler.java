@@ -40,7 +40,7 @@ public class Scheduler implements Runnable {
 				Thread.currentThread().getName() + " has received the signal.\nA user on floor #" + e.getFloor()
 						+ " wants to go " + e.getElevatorButton() + " to floor #" + e.getElevatorCarID()
 						+ "\nNotifying the elevator\n");
-		pipe.sendToElevator(eventQueue.getQueue());
+		pipe.sendToElevator(eventQueue.remove());
 	}
 
 	/**

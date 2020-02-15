@@ -1,7 +1,6 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import sysc3033.group9.elevatorproject.GUI.SystemView;
@@ -24,9 +23,9 @@ public class ElevatorSystem implements Runnable {
 	private int currentFloor, floorThreshold;
 	private Elevator elevator;
 	private SystemView view;
+	private LinkedList<Integer> requests, designations;
 	private List<FloorEvent> eventQueue;
-	private ArrayList<Integer> stops, stops2; // stops 1 will be the stops on the to the threshold
-	// stops 2 will be the stops on the way down
+	private boolean takingRequests, takingDesignations;
 
 	/**
 	 * Default constructor
@@ -41,9 +40,11 @@ public class ElevatorSystem implements Runnable {
 		this.pipe = pipe;
 		this.isMoving = false;
 		this.view = view;
-		this.stops = new ArrayList<Integer>();
-		this.stops2 = new ArrayList<Integer>();
+		this.requests = new LinkedList<Integer>();
+		this.designations = new LinkedList<Integer>();
+		this.eventQueue = new LinkedList<FloorEvent>();
 		this.floorThreshold = -1;
+		this.takingDesignations = false;
 	}
 
 	@Override
@@ -55,7 +56,7 @@ public class ElevatorSystem implements Runnable {
 				if (currentFloor != floorThreshold) {
 					handleMove();
 				} else {
-					isMoving = !isMoving;
+					isMoving = false;
 				}
 			} else {
 				view.setQueue(view.getQueueText(), "NONE IN QUEUE");
@@ -70,52 +71,30 @@ public class ElevatorSystem implements Runnable {
 	private void handleElevatorEvent() {
 		view.setText(view.getElevatorText(),
 				Thread.currentThread().getName() + " has received the signal about a new event.\n");
-		this.eventQueue = pipe.getEventQueue();
-		int i = 0;
-		for (FloorEvent e : eventQueue) {
-			System.out.println(e.toString() + " " + i);
-			i++;
+		eventQueue.add(pipe.getEvent());
+		FloorEvent e = eventQueue.remove(0);
+		if (!requests.contains(e.getFloor())) {
+			requests.add(e.getFloor());
+		}
+		if (!requests.contains(e.getElevatorCarID())) {
+			designations.add(e.getElevatorCarID());
+		}
+		if (!isMoving) {
+			takingRequests = true;
+			isMoving = true;
+			setInitialStatus(e);
 		}
 		MotorStatus status = elevator.getMotor().getStatus();
-		if (!isMoving) {
-			FloorEvent e = eventQueue.remove(0);
-			floorThreshold = e.getFloor();
-			stops.add(floorThreshold);
-			stops2.add(e.getElevatorCarID());
-			isMoving = true;
-			setStatus(e);
-		} else {
-			FloorEvent e = eventQueue.get(0);
-			int check = e.getElevatorCarID() - e.getFloor();
-			if (check < 0 && status.equals(MotorStatus.DOWN)) {
-				if (floorThreshold == -1 || e.getElevatorCarID() < floorThreshold) {
-					floorThreshold = e.getElevatorCarID();
-					addStops(e);
-					eventQueue.remove(0);
-				}
-			} else if (check > 0 && status.equals(MotorStatus.UP)) {
-				if (floorThreshold == -1 || e.getElevatorCarID() > floorThreshold) {
-					floorThreshold = e.getElevatorCarID();
-					addStops(e);
-					eventQueue.remove(0);
-				}
-			}
-		}
 		view.setText(view.getDisplayText(), currentFloor + " " + status + "\n");
 		pipe.setSchedulerToElevator(false);
 	}
 
-	private void setStatus(FloorEvent e) {
+	private void setInitialStatus(FloorEvent e) {
 		if (e.getFloor() - currentFloor > 0) {
 			elevator.getMotor().setStatus(MotorStatus.UP);
-		} else {
+		} else if (e.getFloor() - currentFloor > 0) {
 			elevator.getMotor().setStatus(MotorStatus.DOWN);
 		}
-	}
-
-	private void addStops(FloorEvent e) {
-		stops.add(e.getElevatorCarID());
-		stops.add(e.getFloor());
 	}
 
 	/**
@@ -135,30 +114,32 @@ public class ElevatorSystem implements Runnable {
 			}
 			view.setText(view.getDisplayText(), currentFloor + " " + elevator.getMotor().getStatus() + "\n");
 			announce(str);
+		} else {
+			promptDoor();
 		}
-		if (stops.contains(currentFloor)) {
-			int index = stops.indexOf(currentFloor);
-			stops.remove(index);
-			if (currentFloor == floorThreshold) {
-				Collections.sort(stops);
-				if (motorStatus.equals(MotorStatus.UP)) {
-					floorThreshold = stops2.remove(0);
-				} else if (motorStatus.equals(MotorStatus.DOWN)) {
-					floorThreshold = stops2.remove(stops.size() - 1);
-				} else {
-					floorThreshold = stops2.remove(0);
-				}
-				if (floorThreshold - currentFloor > 0) {
-					elevator.getMotor().setStatus(MotorStatus.UP);
-				} else {
-					elevator.getMotor().setStatus(MotorStatus.DOWN);
-				}
+		if (takingRequests && requests.contains(currentFloor)) {
+			requests.remove(0);
+			if (requests.isEmpty()) {
+				takingRequests = false;
+				takingDesignations = true;
 			}
 			promptDoor();
-		}
-		if (currentFloor == floorThreshold) {
+			MotorStatus newStatus = (designations.peek() - currentFloor > 0) ? MotorStatus.UP : MotorStatus.DOWN;
+			elevator.getMotor().setStatus(newStatus);
+		} else if (takingDesignations && designations.contains(currentFloor)) {
+			designations.remove(0);
+			if (designations.isEmpty()) {
+				takingDesignations = false;
+			}
 			promptDoor();
-			elevator.getMotor().setStatus(MotorStatus.IDLE);
+			if (!requests.isEmpty()) {
+				takingRequests = true;
+				MotorStatus newStatus = (requests.peek() - currentFloor > 0) ? MotorStatus.UP : MotorStatus.DOWN;
+				elevator.getMotor().setStatus(newStatus);
+			} else {
+				elevator.getMotor().setStatus(MotorStatus.IDLE);
+				isMoving = false;
+			}
 		}
 
 	}

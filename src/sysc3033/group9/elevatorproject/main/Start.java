@@ -1,7 +1,5 @@
 package sysc3033.group9.elevatorproject.main;
 
-import java.util.Random;
-
 import sysc3033.group9.elevatorproject.GUI.SystemView;
 import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.event.EventFile;
@@ -35,11 +33,12 @@ public class Start {
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-		for (int i = 0; i < 2; i++) {
+		for (int i = 0; i < 3; i++) {
 			new FloorEvent();
-			view.setText(view.getEventPanelText(), "EVENT" + 1 + ":"
+			view.setText(view.getEventPanelText(), "EVENT" + i + ":"
 					+ Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile()).toString() + "\n");
-			Sleeper.sleep(new Random().nextInt((6000 - 200) + 1) + 200);
+			Sleeper.sleep(5000);
+			// new Random().nextInt((16000 - 200) + 1) + 200
 		}
 	}
 }
