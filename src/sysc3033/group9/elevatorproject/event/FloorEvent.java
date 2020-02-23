@@ -21,7 +21,7 @@ public class FloorEvent {
 	private Time time;
 	private int floor;
 	private Direction button;
-	private int carID;
+	private int targetFloor;
 	private static final Random RANDOM = new Random();
 
 	/**
@@ -43,16 +43,16 @@ public class FloorEvent {
 	/**
 	 * Third FloorEvent constructor
 	 * 
-	 * @param time      is the time passed in
-	 * @param floor     is the floor number between the MAX and MIN values
-	 * @param direction is either UP or DOWN
-	 * @param carID     is an integer that between separate elevator cars
+	 * @param time        is the time passed in
+	 * @param floor       is the floor number between the MAX and MIN values
+	 * @param direction   is either UP or DOWN
+	 * @param targetFloor is an integer that between separate elevator cars
 	 */
-	public FloorEvent(Time time, int floor, Direction button, int carID) {
+	public FloorEvent(Time time, int floor, Direction button, int targetFloor) {
 		this.time = time;
 		this.floor = floor;
 		this.button = button;
-		this.carID = carID;
+		this.targetFloor = targetFloor;
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class FloorEvent {
 
 			try {
 				floor = Integer.parseInt(spaceSplit[1]);
-				carID = Integer.parseInt(spaceSplit[3]);
+				targetFloor = Integer.parseInt(spaceSplit[3]);
 			} catch (NumberFormatException e) {
 				throw new ParseException("Invalid floor event", 0);
 			}
@@ -87,9 +87,9 @@ public class FloorEvent {
 		}
 		this.floor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
 		do {
-			this.carID = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
-		} while (carID == floor);
-		if (carID > floor) {
+			this.targetFloor = RANDOM.nextInt((FloorID.MAXFLOOR - FloorID.MINFLOOR) + 1) + FloorID.MINFLOOR;
+		} while (targetFloor == floor);
+		if (targetFloor > floor) {
 			button = Direction.UP;
 		} else {
 			button = Direction.DOWN;
@@ -124,17 +124,12 @@ public class FloorEvent {
 		return button;
 	}
 
-	/**
-	 * getter for the elevator car ID
-	 * 
-	 * @return the elevator car ID as an integer
-	 */
-	public int getElevatorCarID() {
-		return carID;
+	public int getTargetFloor() {
+		return targetFloor;
 	}
 
 	@Override
 	public String toString() {
-		return time.toString() + " " + floor + " " + button + " " + carID;
+		return time.toString() + " " + floor + " " + button + " " + targetFloor;
 	}
 }

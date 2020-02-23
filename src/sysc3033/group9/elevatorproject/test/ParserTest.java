@@ -43,7 +43,7 @@ public class ParserTest {
 		}
 		assertEquals(floorEvent.getFloor(), 2);
 		assertEquals(floorEvent.getElevatorButton(), Direction.UP);
-		assertEquals(floorEvent.getElevatorCarID(), 4);
+		assertEquals(floorEvent.getTargetFloor(), 4);
 	}
 
 }

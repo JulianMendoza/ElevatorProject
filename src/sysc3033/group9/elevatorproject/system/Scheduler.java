@@ -36,10 +36,6 @@ public class Scheduler implements Runnable {
 	}
 
 	public void scheduleEvent(FloorEvent e) {
-		if (e.getElevatorCarID() == -1) {
-			// Compute the fastest car
-		} else {
-			elevatorSystem.scheduleEvent(e);
-		}
+		elevatorSystem.scheduleEvent(e, 0); // always use car 0 for now
 	}
 }

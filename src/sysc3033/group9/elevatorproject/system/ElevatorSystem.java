@@ -39,24 +39,25 @@ public class ElevatorSystem implements Runnable {
 	@Override
 	public void run() {
 		while (true) {
-			for (FloorEvent e : eventQueue.removePriorityEvents()) {
-				handleFloorEvent(e);
+			Map<Elevator, FloorEvent> priorityEvents = eventQueue.removePriorityEvents();
+			for (Elevator elevator : priorityEvents.keySet()) {
+				handleFloorEvent(priorityEvents.get(elevator), elevator);
 			}
 			Sleeper.sleep(SleepTime.DEFAULT);
 		}
 	}
 
-	public synchronized void scheduleEvent(FloorEvent e) {
-		eventQueue.add(e);
+	public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
+		eventQueue.add(e, elevators.get(elevatorCarID));
 	}
 
-	private void handleFloorEvent(FloorEvent e) {
-		ElevatorEvent e2 = createElevatorEvent(e);
+	private void handleFloorEvent(FloorEvent e, Elevator elevator) {
+		ElevatorEvent e2 = createElevatorEvent(e, elevator);
 		dispatchElevatorEvent(e2);
 	}
 
-	private ElevatorEvent createElevatorEvent(FloorEvent e) {
-		return new ElevatorEvent(elevators.get(e.getElevatorCarID()), e.getFloor());
+	private ElevatorEvent createElevatorEvent(FloorEvent e, Elevator elevator) {
+		return new ElevatorEvent(elevator, e.getFloor());
 	}
 
 	private void dispatchElevatorEvent(ElevatorEvent e) {

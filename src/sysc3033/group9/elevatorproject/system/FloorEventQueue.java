@@ -1,6 +1,5 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,19 +28,18 @@ public class FloorEventQueue {
 		}
 	}
 
-	public synchronized List<FloorEvent> removePriorityEvents() {
-		List<FloorEvent> priorityEvents = new ArrayList<FloorEvent>();
+	public synchronized Map<Elevator, FloorEvent> removePriorityEvents() {
+		Map<Elevator, FloorEvent> priorityEvents = new HashMap<Elevator, FloorEvent>();
 		for (Elevator elevator : eventMap.keySet()) {
 			List<FloorEvent> eventQueue = eventMap.get(elevator);
 			if (!eventQueue.isEmpty() && !elevator.isBusy()) {
-				priorityEvents.add(eventQueue.remove(0));
+				priorityEvents.put(elevator, eventQueue.remove(0));
 			}
 		}
 		return priorityEvents;
 	}
 
-	public synchronized void add(FloorEvent e) {
-		Elevator elevator = elevators.get(e.getElevatorCarID());
+	public synchronized void add(FloorEvent e, Elevator elevator) {
 		List<FloorEvent> eventQueue = eventMap.get(elevator);
 		eventQueue.add(e);
 		sortQueue(elevator, eventQueue);
