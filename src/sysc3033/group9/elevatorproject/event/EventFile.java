@@ -1,6 +1,7 @@
 package sysc3033.group9.elevatorproject.event;
 
 import java.io.File;
+import java.io.Serializable;
 
 import sysc3033.group9.elevatorproject.constants.FilePath;
 
@@ -8,10 +9,10 @@ import sysc3033.group9.elevatorproject.constants.FilePath;
  * This file represents an elevator event; It simulates an elevator stop and go
  * request
  * 
- * @author Julian Mendoza, Kelly Harrison
- *
+ * @author Julian Mendoza
  */
-public class EventFile {
+public class EventFile implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private long timeStamp;
 	private File file;
 
@@ -22,6 +23,7 @@ public class EventFile {
 		String cwd = new File("").getAbsolutePath();
 		this.file = new File(cwd + FilePath.EVENT_FILE);
 		this.timeStamp = file.lastModified();
+		System.out.println(this.timeStamp);
 	}
 
 	/**
@@ -36,6 +38,10 @@ public class EventFile {
 		} else {
 			return false;
 		}
+	}
+
+	public void test() {
+		System.out.println(this.timeStamp);
 	}
 
 	/**

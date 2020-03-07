@@ -1,19 +1,15 @@
 package sysc3033.group9.elevatorproject.system;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
-import java.util.ArrayList;
-import java.util.List;
 
-import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
-import sysc3033.group9.elevatorproject.floor.Floor;
-import sysc3033.group9.elevatorproject.floor.FloorSpan;
-import sysc3033.group9.elevatorproject.util.Parser;
 
 /**
  * FloorSubSystem class contains the knowledge of all floors. Button presses and
@@ -24,59 +20,29 @@ import sysc3033.group9.elevatorproject.util.Parser;
  */
 public class FloorSystem {
 
-	private List<Floor> floors;
-	private Schedule schedule;
 	private EventFile eventFile;
 	private int PORTNUMBER = 3333; // move to util folder
 	private DatagramSocket socket;
 	private DatagramPacket sendPacket, receivePacket;
+	private ObjectOutputStream out;
+	private ByteArrayOutputStream bos;
+	private byte[] eventFileObject;
 
-	/**
-	 * Constructor of the floor system
-	 * 
-	 * @param floorSpan The span of the number of floors
-	 * @param schedule  A pipe which will communicate nessacary events
-	 * @param eventFile System file which is polled to check if a new event has
-	 *                  occured
-	 * @param view      GUI
-	 */
-	public FloorSystem(FloorSpan floorSpan, Schedule schedule, EventFile eventFile) {
-		createFloors(floorSpan);
-		this.schedule = schedule;
+	public FloorSystem(EventFile eventFile) {
 		this.eventFile = eventFile;
 		try {
 			socket = new DatagramSocket(PORTNUMBER);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Create the floors
-	 * 
-	 * @param floorSpan span of the number of floors
-	 */
-	private void createFloors(FloorSpan floorSpan) {
-		floors = new ArrayList<Floor>();
-
-		for (int i = floorSpan.getMinFloorID(); i <= floorSpan.getMaxFloorID(); i++) {
-			floors.add(new Floor(i, i == floorSpan.getMinFloorID(), i == floorSpan.getMaxFloorID()));
-		}
-	}
-
-	private void signal() {
-		FloorEvent e = Parser.readTextFile(FilePath.EVENT_FILE, eventFile.getFile());
-		// view.setText(view.getFloorText(), Thread.currentThread().getName() + " has
-		// received an event.\nFloor #"
-		// + e.getFloor() + " was pressed.\nSignaling to Scheduler\n");
-		schedule.add(e);
+		this.bos = new ByteArrayOutputStream();
+		createEventObject();
 	}
 
 	private void process() throws IOException {
-		String s = "Hello from floor";
 		String s2 = "Give me data";
 		System.out.println("SENDING A REQUEST TO THE SCHEDULER");
-		sendPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, InetAddress.getLocalHost(), 4444);
+		sendPacket = new DatagramPacket(eventFileObject, eventFileObject.length, InetAddress.getLocalHost(), 4444);
 		socket.send(sendPacket);
 		receivePacket = new DatagramPacket(new byte[1024], 1024);
 		socket.receive(receivePacket);
@@ -91,8 +57,24 @@ public class FloorSystem {
 		System.out.println(new String(receivePacket.getData()));
 	}
 
+	private void createEventObject() {
+		try {
+			out = new ObjectOutputStream(bos);
+			out.writeObject(this.eventFile);
+			out.flush();
+			eventFileObject = bos.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public static void main(String[] args) throws IOException {
-		FloorSystem floor = new FloorSystem(new FloorSpan(1, 7), new Schedule(), new EventFile());
+		FloorEvent e = new FloorEvent();
+		for (int i = 0; i < 6; i++) {
+			e.createNewEvent();
+		}
+		FloorSystem floor = new FloorSystem(new EventFile());
 		floor.process();
 	}
 

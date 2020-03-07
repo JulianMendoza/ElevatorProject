@@ -1,10 +1,15 @@
 package sysc3033.group9.elevatorproject.system;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+
+import sysc3033.group9.elevatorproject.event.EventFile;
 
 /**
  * ClientToServer will become a thread that handles the data packet coming from
@@ -20,6 +25,8 @@ public class ClientToServer implements Runnable {
 	private byte data[], request[];
 	private DatagramPacket clientData, clientReply, serverRequest, serverReply;
 	private InetAddress IP;
+	private ObjectInput in;
+	private ByteArrayInputStream bis;
 
 	/**
 	 * Constructor of the thread
@@ -42,13 +49,26 @@ public class ClientToServer implements Runnable {
 		serverReply = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 5555);
 	}
 
+	private void deserializeObject(byte[] object) {
+		try {
+			bis = new ByteArrayInputStream(object);
+			in = new ObjectInputStream(bis);
+			EventFile file = (EventFile) (in.readObject());
+			file.test();
+		} catch (IOException ex) {
+
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+	}
+
 	@Override
 	public void run() {
 		try {
 			System.out.println("THE SCHEDULER IS WAITING FOR A PACKET");
 			client.receive(clientData);
 			System.out.println("THE SCHEDULER HAS RECEIVED A REQUEST:");
-			System.out.println(new String(clientData.getData()));
+			deserializeObject(clientData.getData());
 			client.send(clientReply);
 			System.out.println("THE SCHEDULER HAS SENT A RESPONSE");
 			System.out.println("THE SCHEDULER IS WAITING FOR AN ELEVATOR");
