@@ -46,7 +46,13 @@ public class Parser {
 				}
 			}
 		}
-		return (FloorEvent[]) floorEvents.toArray();
+
+		int size = floorEvents.size();
+		FloorEvent[] arr = new FloorEvent[size];
+		for (int i = 0; i < size; i++) {
+			arr[i] = floorEvents.get(i);
+		}
+		return arr;
 	}
 
 	public static void deparse(String fileName, String event) {
