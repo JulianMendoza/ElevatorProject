@@ -17,7 +17,7 @@ import sysc3033.group9.elevatorproject.util.Time;
 public class ParserTest {
 	private File file;
 	private String cwd, event;
-	private FloorEvent floorEvent;
+	private FloorEvent[] floorEvent;
 
 	@Before
 	public void initialize() {
@@ -37,13 +37,13 @@ public class ParserTest {
 		Parser.deparse(cwd, event);
 		floorEvent = Parser.readTextFile(cwd, file);
 		try {
-			assertEquals(floorEvent.getTime(), new Time("14:05:15.0"));
+			assertEquals(floorEvent[0].getTime(), new Time("14:05:15.0"));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		assertEquals(floorEvent.getFloor(), 2);
-		assertEquals(floorEvent.getElevatorButton(), Direction.UP);
-		assertEquals(floorEvent.getTargetFloor(), 4);
+		assertEquals(floorEvent[0].getFloor(), 2);
+		assertEquals(floorEvent[0].getElevatorButton(), Direction.UP);
+		assertEquals(floorEvent[0].getTargetFloor(), 4);
 	}
 
 }

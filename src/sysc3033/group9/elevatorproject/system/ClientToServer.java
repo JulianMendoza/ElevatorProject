@@ -15,6 +15,7 @@ import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.util.Parser;
+import sysc3033.group9.elevatorproject.util.Sleeper;
 
 /**
  * ClientToServer will become a thread that handles the data packet coming from
@@ -79,6 +80,7 @@ public class ClientToServer implements Runnable {
 		byte[] data2 = createEventObject(events[1]);
 		clientData = new DatagramPacket(data2, data2.length, IP, 5556);
 		try {
+			Sleeper.sleep(500);
 			server.send(clientData);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -87,6 +89,7 @@ public class ClientToServer implements Runnable {
 		byte[] data3 = createEventObject(events[2]);
 		clientData = new DatagramPacket(data3, data3.length, IP, 5557);
 		try {
+			Sleeper.sleep(500);
 			server.send(clientData);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
