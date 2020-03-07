@@ -52,12 +52,17 @@ public class ElevatorSystem {
 			e.printStackTrace();
 		}
 		elevator = new Elevator(floorSpan);
+		System.out.println("PORT NUMBER: " + port);
 	}
 
 	/**
-	 * public ElevatorSystem(FloorSpan floorSpan, int numElevators) { elevators = new HashMap<Integer, Elevator>(); for (int i = 0; i < numElevators; i++) { elevators.put(i, new Elevator(floorSpan)); } eventQueue = new FloorEventQueue(elevators); }
+	 * public ElevatorSystem(FloorSpan floorSpan, int numElevators) { elevators =
+	 * new HashMap<Integer, Elevator>(); for (int i = 0; i < numElevators; i++) {
+	 * elevators.put(i, new Elevator(floorSpan)); } eventQueue = new
+	 * FloorEventQueue(elevators); }
 	 * 
-	 * public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) { eventQueue.add(e, elevators.get(elevatorCarID)); }
+	 * public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
+	 * eventQueue.add(e, elevators.get(elevatorCarID)); }
 	 */
 
 	private void handleFloorEvent(FloorEvent e, Elevator elevator) {
@@ -135,6 +140,7 @@ public class ElevatorSystem {
 			bis = new ByteArrayInputStream(object);
 			in = new ObjectInputStream(bis);
 			event = (FloorEvent) (in.readObject());
+			System.out.println(event);
 		} catch (IOException ex) {
 
 		} catch (ClassNotFoundException e) {

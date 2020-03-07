@@ -23,6 +23,8 @@ public class ElevatorEvent implements Runnable {
 	}
 
 	public ElevatorEvent(Elevator elevator, int targetFloor) {
+		this.elevator = elevator;
+		this.targetFloor = targetFloor;
 		Thread thread = new Thread(this);
 		thread.start();
 	}

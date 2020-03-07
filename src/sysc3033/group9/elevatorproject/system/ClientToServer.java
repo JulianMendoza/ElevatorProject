@@ -55,7 +55,6 @@ public class ClientToServer implements Runnable {
 		clientReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 3333);
 		request = new byte[1024];
 		serverRequest = new DatagramPacket(data, data.length, IP, 5555);
-		bos = new ByteArrayOutputStream();
 	}
 
 	private void deserializeObject(byte[] object) {
@@ -74,6 +73,9 @@ public class ClientToServer implements Runnable {
 		events = Parser.readTextFile(FilePath.EVENT_FILE, file.getFile());
 		byte[] data = createEventObject(events[0]);
 		serverReply = new DatagramPacket(data, data.length, IP, 5555);
+		System.out.println(events[0]);
+		System.out.println(events[1]);
+		System.out.println(events[2]);
 		byte[] data2 = createEventObject(events[1]);
 		clientData = new DatagramPacket(data2, data2.length, IP, 5556);
 		try {
@@ -94,7 +96,7 @@ public class ClientToServer implements Runnable {
 
 	private byte[] createEventObject(Object o) {
 		byte[] byteStream = null;
-
+		bos = new ByteArrayOutputStream();
 		try {
 			out = new ObjectOutputStream(bos);
 			out.writeObject(o);
