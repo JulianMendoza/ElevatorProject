@@ -1,7 +1,5 @@
 package sysc3033.group9.elevatorproject.main;
 
-import java.text.ParseException;
-
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 import sysc3033.group9.elevatorproject.floor.FloorSpan;
@@ -18,6 +16,10 @@ import sysc3033.group9.elevatorproject.system.Scheduler;
  */
 public class Start {
 	public static void main(String[] args) {
+		FloorEvent e = new FloorEvent();
+		for (int i = 0; i < 7; i++) {
+			e.createNewEvent();
+		}
 		Schedule schedule = new Schedule();
 		EventFile eventFile = new EventFile();
 		FloorSpan floorSpan = new FloorSpan(1, 7);
@@ -28,14 +30,11 @@ public class Start {
 		floorSubSystem.start();
 		elevatorSubSystem.start();
 		schedulerSubSystem.start();
-
-		try {
-			schedule.add(new FloorEvent("00:33:36.579 6 Down 0"));
-			schedule.add(new FloorEvent("00:33:36.579 3 Down 0"));
-
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		/**
+		 * try { schedule.add(new FloorEvent("00:33:36.579 6 Down 0")); schedule.add(new
+		 * FloorEvent("00:33:36.579 3 Down 0"));
+		 * 
+		 * } catch (ParseException e) { e.printStackTrace(); }
+		 **/
 	}
 }

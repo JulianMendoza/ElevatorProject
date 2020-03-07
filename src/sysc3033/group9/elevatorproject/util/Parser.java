@@ -1,11 +1,13 @@
 package sysc3033.group9.elevatorproject.util;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.text.ParseException;
 
 import sysc3033.group9.elevatorproject.event.FloorEvent;
@@ -17,6 +19,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
  *
  */
 public class Parser {
+	private static Writer output;
 
 	public static FloorEvent readTextFile(String fileName, File file) {
 		FloorEvent event = null;
@@ -48,12 +51,12 @@ public class Parser {
 	public static void deparse(String fileName, String event) {
 		String cwd = new File("").getAbsolutePath();
 		cwd += fileName;
-		FileWriter writer = null;
+		String insert = System.lineSeparator() + event;
 		try {
-			writer = new FileWriter(cwd);
-			writer.write(event);
+			output = new BufferedWriter(new FileWriter(cwd, true));
+			output.append(insert);
 			System.out.println(event + " generated in directory: " + cwd);
-			writer.close();
+			output.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -77,9 +77,10 @@ public class FloorEvent {
 	}
 
 	/**
-	 * Creates a new floor event within the elevator floor maximum and minimum values
+	 * Creates a new floor event within the elevator floor maximum and minimum
+	 * values
 	 */
-	private void createNewEvent() {
+	public void createNewEvent() {
 		try {
 			this.time = new Time(java.time.LocalTime.now().toString());
 		} catch (ParseException e) {
