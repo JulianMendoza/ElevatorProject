@@ -8,12 +8,12 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import sysc3033.group9.elevatorproject.constants.Port;
 import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 /**
- * FloorSubSystem class contains the knowledge of all floors. Button presses and
- * display lamps are updated here
+ * FloorSubSystem class contains the knowledge of all floors. Button presses and display lamps are updated here
  * 
  * @author Julian Mendoza, Giuseppe Papalia
  *
@@ -21,7 +21,6 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class FloorSystem {
 
 	private EventFile eventFile;
-	private int PORTNUMBER = 3333; // move to util folder
 	private DatagramSocket socket;
 	private DatagramPacket sendPacket, receivePacket;
 	private ObjectOutputStream out;
@@ -31,7 +30,7 @@ public class FloorSystem {
 	public FloorSystem(EventFile eventFile) {
 		this.eventFile = eventFile;
 		try {
-			socket = new DatagramSocket(PORTNUMBER);
+			socket = new DatagramSocket(Port.FLOOR_SYSTEM);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}

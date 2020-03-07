@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import sysc3033.group9.elevatorproject.constants.Port;
 import sysc3033.group9.elevatorproject.elevator.Elevator;
 import sysc3033.group9.elevatorproject.event.ElevatorEvent;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
@@ -29,7 +30,7 @@ public class ElevatorSystem {
 	private InetAddress IP;
 
 	public ElevatorSystem(FloorSpan floorSpan) {
-		int port = 5555;
+		int port = Port.ELEVATOR_SYSTEM;
 		while (socket == null) {
 			try {
 				socket = new DatagramSocket(port);
