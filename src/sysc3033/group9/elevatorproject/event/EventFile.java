@@ -23,7 +23,6 @@ public class EventFile implements Serializable {
 		String cwd = new File("").getAbsolutePath();
 		this.file = new File(cwd + FilePath.EVENT_FILE);
 		this.timeStamp = file.lastModified();
-		System.out.println(this.timeStamp);
 	}
 
 	/**

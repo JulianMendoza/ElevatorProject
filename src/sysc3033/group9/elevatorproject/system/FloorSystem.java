@@ -13,7 +13,8 @@ import sysc3033.group9.elevatorproject.event.EventFile;
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
 /**
- * FloorSubSystem class contains the knowledge of all floors. Button presses and display lamps are updated here
+ * FloorSubSystem class contains the knowledge of all floors. Button presses and
+ * display lamps are updated here
  * 
  * @author Julian Mendoza, Giuseppe Papalia
  *
@@ -70,7 +71,7 @@ public class FloorSystem {
 
 	public static void main(String[] args) throws IOException {
 		FloorEvent e = new FloorEvent();
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 2; i++) {
 			e.createNewEvent();
 		}
 		FloorSystem floor = new FloorSystem(new EventFile());

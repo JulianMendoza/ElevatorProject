@@ -1,5 +1,6 @@
 package sysc3033.group9.elevatorproject.constants;
 
+import java.io.Serializable;
 import java.text.ParseException;
 
 /**
@@ -8,7 +9,7 @@ import java.text.ParseException;
  * @author Giuseppe Papalia
  *
  */
-public enum Direction {
+public enum Direction implements Serializable {
 
 	UP, DOWN, IDLE;
 

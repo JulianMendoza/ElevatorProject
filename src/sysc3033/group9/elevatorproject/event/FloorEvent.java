@@ -1,5 +1,6 @@
 package sysc3033.group9.elevatorproject.event;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Random;
 
@@ -16,8 +17,12 @@ import sysc3033.group9.elevatorproject.util.Time;
  * @documentation Kelly Harrison
  *
  */
-public class FloorEvent {
+public class FloorEvent implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private Time time;
 	private int floor;
 	private Direction button;

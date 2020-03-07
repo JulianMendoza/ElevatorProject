@@ -1,15 +1,20 @@
 package sysc3033.group9.elevatorproject.system;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import sysc3033.group9.elevatorproject.constants.FilePath;
 import sysc3033.group9.elevatorproject.event.EventFile;
+import sysc3033.group9.elevatorproject.event.FloorEvent;
+import sysc3033.group9.elevatorproject.util.Parser;
 
 /**
  * ClientToServer will become a thread that handles the data packet coming from
@@ -27,6 +32,10 @@ public class ClientToServer implements Runnable {
 	private InetAddress IP;
 	private ObjectInput in;
 	private ByteArrayInputStream bis;
+	private EventFile file;
+	private FloorEvent[] events;
+	private ObjectOutputStream out;
+	private ByteArrayOutputStream bos;
 
 	/**
 	 * Constructor of the thread
@@ -46,20 +55,55 @@ public class ClientToServer implements Runnable {
 		clientReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 3333);
 		request = new byte[1024];
 		serverRequest = new DatagramPacket(data, data.length, IP, 5555);
-		serverReply = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 5555);
+		bos = new ByteArrayOutputStream();
 	}
 
 	private void deserializeObject(byte[] object) {
 		try {
 			bis = new ByteArrayInputStream(object);
 			in = new ObjectInputStream(bis);
-			EventFile file = (EventFile) (in.readObject());
-			file.test();
+			file = (EventFile) (in.readObject());
 		} catch (IOException ex) {
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void createEvents() {
+		events = Parser.readTextFile(FilePath.EVENT_FILE, file.getFile());
+		byte[] data = createEventObject(events[0]);
+		serverReply = new DatagramPacket(data, data.length, IP, 5555);
+		byte[] data2 = createEventObject(events[1]);
+		clientData = new DatagramPacket(data2, data2.length, IP, 5556);
+		try {
+			server.send(clientData);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		byte[] data3 = createEventObject(events[2]);
+		clientData = new DatagramPacket(data3, data3.length, IP, 5557);
+		try {
+			server.send(clientData);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private byte[] createEventObject(Object o) {
+		byte[] byteStream = null;
+
+		try {
+			out = new ObjectOutputStream(bos);
+			out.writeObject(o);
+			out.flush();
+			byteStream = bos.toByteArray();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return byteStream;
 	}
 
 	@Override
@@ -76,8 +120,9 @@ public class ClientToServer implements Runnable {
 			server.receive(serverRequest);
 			System.out.println("THE SCHEDULER HAS BEEN NOTIFIED BY AN ELEVATOR");
 			System.out.println(new String(serverRequest.getData()));
+			createEvents();
 			server.send(serverReply);
-			System.out.println("THE SCHEDULUER HAS SCHEDULUED THE EVENT");
+			System.out.println("THE SCHEDULER HAS SCHEDULED THE EVENT");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

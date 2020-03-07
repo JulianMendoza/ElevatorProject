@@ -4,8 +4,6 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import sysc3033.group9.elevatorproject.event.FloorEvent;
-
 /**
  * Scheduler Thread handles the communication between the elevator and floor
  * subsystem
@@ -34,10 +32,10 @@ public class Scheduler {
 		this(schedule);
 		this.elevatorSystem = elevatorSystem;
 	}
-
-	public void scheduleEvent(FloorEvent e) {
-		elevatorSystem.scheduleEvent(e, 0); // always use car 0 for now
-	}
+	/*
+	 * public void scheduleEvent(FloorEvent e) { elevatorSystem.scheduleEvent(e, 0);
+	 * // always use car 0 for now }
+	 */
 
 	private void process() throws UnknownHostException {
 		clientToServer = new Thread(new ClientToServer(client, server), "ClientToServer");

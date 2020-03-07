@@ -1,5 +1,6 @@
 package sysc3033.group9.elevatorproject.util;
 
+import java.io.Serializable;
 import java.text.ParseException;
 
 /**
@@ -8,7 +9,11 @@ import java.text.ParseException;
  * @author Giuseppe Papalia
  *
  */
-public class Time {
+public class Time implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String time;
 	private int hours;
 	private int minutes;
@@ -99,7 +104,8 @@ public class Time {
 			return true;
 		} else if (o instanceof Time) {
 			Time time = (Time) o;
-			return time.getHours() == hours && time.getMinutes() == minutes && time.getSeconds() == seconds && time.getMilliseconds() == milliseconds;
+			return time.getHours() == hours && time.getMinutes() == minutes && time.getSeconds() == seconds
+					&& time.getMilliseconds() == milliseconds;
 		} else {
 			return false;
 		}

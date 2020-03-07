@@ -1,13 +1,15 @@
 package sysc3033.group9.elevatorproject.system;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 
 import sysc3033.group9.elevatorproject.constants.Port;
 import sysc3033.group9.elevatorproject.elevator.Elevator;
@@ -23,14 +25,20 @@ import sysc3033.group9.elevatorproject.floor.FloorSpan;
  */
 public class ElevatorSystem {
 
-	Map<Integer, Elevator> elevators;
+	// Map<Integer, Elevator> elevators;
 	FloorEventQueue eventQueue;
 	private DatagramSocket socket;
 	private DatagramPacket requestPacket, dataPacket, ackPacket;
 	private InetAddress IP;
+	private Elevator elevator;
+	private ObjectInput in;
+	private ByteArrayInputStream bis;
+	private FloorEvent event;
+	private ByteArrayOutputStream bos;
+	private int port;
 
 	public ElevatorSystem(FloorSpan floorSpan) {
-		int port = Port.ELEVATOR_SYSTEM;
+		port = Port.ELEVATOR_SYSTEM;
 		while (socket == null) {
 			try {
 				socket = new DatagramSocket(port);
@@ -41,35 +49,20 @@ public class ElevatorSystem {
 		try {
 			IP = InetAddress.getLocalHost();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		elevator = new Elevator(floorSpan);
 	}
 
 	/**
-	 * Default constructor
+	 * public ElevatorSystem(FloorSpan floorSpan, int numElevators) { elevators =
+	 * new HashMap<Integer, Elevator>(); for (int i = 0; i < numElevators; i++) {
+	 * elevators.put(i, new Elevator(floorSpan)); } eventQueue = new
+	 * FloorEventQueue(elevators); }
 	 * 
-	 * @param floorSpan the span of the elevator
-	 * @param pipe      the communication pipe
-	 * @param view      GUI
+	 * public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
+	 * eventQueue.add(e, elevators.get(elevatorCarID)); }
 	 */
-	public ElevatorSystem(FloorSpan floorSpan, int numElevators) {
-		elevators = new HashMap<Integer, Elevator>();
-		for (int i = 0; i < numElevators; i++) {
-			elevators.put(i, new Elevator(floorSpan));
-		}
-		eventQueue = new FloorEventQueue(elevators);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @Override public void run() { while (true) { Map<Elevator, FloorEvent> priorityEvents = eventQueue.removePriorityEvents(); for (Elevator elevator : priorityEvents.keySet()) { handleFloorEvent(priorityEvents.get(elevator), elevator); } Sleeper.sleep(SleepTime.DEFAULT); } }
-	 */
-
-	public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
-		eventQueue.add(e, elevators.get(elevatorCarID));
-	}
 
 	private void handleFloorEvent(FloorEvent e, Elevator elevator) {
 		ElevatorEvent e2 = createElevatorEvent(e, elevator);
@@ -86,43 +79,69 @@ public class ElevatorSystem {
 	}
 
 	private void process() {
-		String s = "Request from the elevator";
-		String s2 = "Processed data is here";
-		requestPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 4445);
-		try {
-			System.out.println("SENDING A REQUEST TO THE SCHEDULER");
-			socket.send(requestPacket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		dataPacket = new DatagramPacket(new byte[1024], 1024);
-		try {
-			socket.receive(dataPacket);
-			System.out.println("RECEIVED APPROVAL FROM THE SCHEDULER");
-			System.out.println(new String(dataPacket.getData()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		// process data
-		ackPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 4445);
-		try {
-			System.out.println("THE ELEVATOR HAS BEEN SCHEDULED, SENDING OUT DATA");
-			socket.send(ackPacket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		dataPacket = new DatagramPacket(new byte[1024], 1024);
-		try {
+		if (port != Port.ELEVATOR_SYSTEM) {
+			String s = "Request from the elevator";
+			String s2 = "Processed data is here";
+			requestPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 4445);
+			try {
+				System.out.println("SENDING A REQUEST TO THE SCHEDULER");
+				socket.send(requestPacket);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dataPacket = new DatagramPacket(new byte[1024], 1024);
+			try {
+				socket.receive(dataPacket);
+				System.out.println("RECEIVED APPROVAL FROM THE SCHEDULER");
+				deserializeObject(dataPacket.getData());
+				handleFloorEvent(this.event, this.elevator);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// process data
+			ackPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 4445);
+			try {
+				System.out.println("THE ELEVATOR HAS BEEN SCHEDULED, SENDING OUT DATA");
+				socket.send(ackPacket);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			dataPacket = new DatagramPacket(new byte[1024], 1024);
+			try {
 
-			socket.receive(dataPacket);
-			System.out.println("SUCCESSFUL CONNECTION");
-			System.out.println(new String(dataPacket.getData()));
-			System.out.println("closing connection");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+				socket.receive(dataPacket);
+				System.out.println("SUCCESSFUL CONNECTION");
+				System.out.println(new String(dataPacket.getData()));
+				System.out.println("closing connection");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			dataPacket = new DatagramPacket(new byte[1024], 1024);
+			try {
+				socket.receive(dataPacket);
+				System.out.println("RECEIVED APPROVAL FROM THE SCHEDULER");
+				deserializeObject(dataPacket.getData());
+				handleFloorEvent(this.event, this.elevator);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private void deserializeObject(byte[] object) {
+		try {
+			bis = new ByteArrayInputStream(object);
+			in = new ObjectInputStream(bis);
+			event = (FloorEvent) (in.readObject());
+		} catch (IOException ex) {
+
+		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
