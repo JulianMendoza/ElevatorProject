@@ -91,6 +91,7 @@ public class ElevatorSystem {
 		String s2 = "Processed data is here";
 		requestPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 4445);
 		try {
+			System.out.println("SENDING A REQUEST TO THE SCHEDULER");
 			socket.send(requestPacket);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -99,15 +100,16 @@ public class ElevatorSystem {
 		dataPacket = new DatagramPacket(new byte[1024], 1024);
 		try {
 			socket.receive(dataPacket);
+			System.out.println("RECEIVED APPROVAL FROM THE SCHEDULER");
+			System.out.println(new String(dataPacket.getData()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Received a packet");
-		System.out.println(new String(dataPacket.getData()));
 		// process data
 		ackPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 4445);
 		try {
+			System.out.println("THE ELEVATOR HAS BEEN SCHEDULED, SENDING OUT DATA");
 			socket.send(ackPacket);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -115,7 +117,10 @@ public class ElevatorSystem {
 		}
 		dataPacket = new DatagramPacket(new byte[1024], 1024);
 		try {
+
 			socket.receive(dataPacket);
+			System.out.println("SUCCESSFUL CONNECTION");
+			System.out.println(new String(dataPacket.getData()));
 			System.out.println("closing connection");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

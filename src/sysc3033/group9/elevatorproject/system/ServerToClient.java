@@ -31,12 +31,12 @@ public class ServerToClient implements Runnable {
 	public ServerToClient(DatagramSocket client, DatagramSocket server) throws UnknownHostException {
 		this.client = client;
 		this.server = server;
-		String s = "Good bye from Elevator";
+		String s = "Good bye from Scheduler";
 		IP = InetAddress.getLocalHost();
 		ack = new byte[1024];
-		serverAck = new DatagramPacket(ack, ack.length, IP, 4445);
+		serverAck = new DatagramPacket(ack, ack.length, IP, 5555);
 		reply = new byte[1024];
-		serverReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 4445);
+		serverReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 5555);
 		request = new byte[1024];
 		clientRequest = new DatagramPacket(request, request.length, IP, 3333);
 		clientReply = new DatagramPacket(ack, ack.length, IP, 3333);
@@ -45,10 +45,18 @@ public class ServerToClient implements Runnable {
 	@Override
 	public void run() {
 		try {
+			System.out.println("THE SCHEDULER IS WAITING FOR DATA");
 			server.receive(serverAck);
+			System.out.println("THE SCHEDULER HAS RECEIVED SOME DATA");
+			System.out.println(new String(serverAck.getData()));
 			server.send(serverReply);
+			System.out.println("THE SCHEDULER HAS NOTIFIED THE SERVER ABOUT THE DATA");
+			System.out.println("THE SCHEDULER IS WAITING FOR THE FLOOR");
 			client.receive(clientRequest);
+			System.out.println("THE SCHEDULER HAS RECEIVED THE REQUEST FROM THE FLOOR");
+			System.out.println(new String(clientRequest.getData()));
 			client.send(clientReply);
+			System.out.println("THE SCHEDULER HAS SEND THE DATA TO THE FLOOR");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -75,12 +75,16 @@ public class FloorSystem {
 	private void process() throws IOException {
 		String s = "Hello from floor";
 		String s2 = "Give me data";
+		System.out.println("SENDING A REQUEST TO THE SCHEDULER");
 		sendPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, InetAddress.getLocalHost(), 4444);
 		socket.send(sendPacket);
 		receivePacket = new DatagramPacket(new byte[1024], 1024);
 		socket.receive(receivePacket);
+		System.out.println("RECEIVED A RESPONSE FROM THE SCHEDULER");
 		System.out.println(new String(receivePacket.getData()));
 		sendPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, InetAddress.getLocalHost(), 4444);
+		System.out.println("REQUESTING DATA FROM THE SCHEDULER"); // this will be display lamps and should continuously
+																	// loop
 		socket.send(sendPacket);
 		socket.receive(receivePacket);
 		System.out.println("Got some data");

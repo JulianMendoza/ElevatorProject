@@ -32,23 +32,32 @@ public class ClientToServer implements Runnable {
 		this.client = client;
 		this.server = server;
 		String s = "Hello from the scheduler";
-		String s2 = "Give me some info from server";
+		String s2 = "Give me some info from scheduler";
 		IP = InetAddress.getLocalHost();
 		data = new byte[1024];
 		clientData = new DatagramPacket(data, data.length, IP, 3333);
 		clientReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 3333);
 		request = new byte[1024];
-		serverRequest = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 5555);
-		serverReply = new DatagramPacket(data, data.length, IP, 5555);
+		serverRequest = new DatagramPacket(data, data.length, IP, 5555);
+		serverReply = new DatagramPacket(s2.getBytes(), s2.getBytes().length, IP, 5555);
 	}
 
 	@Override
 	public void run() {
 		try {
+			System.out.println("THE SCHEDULER IS WAITING FOR A PACKET");
 			client.receive(clientData);
+			System.out.println("THE SCHEDULER HAS RECEIVED A REQUEST:");
+			System.out.println(new String(clientData.getData()));
 			client.send(clientReply);
+			System.out.println("THE SCHEDULER HAS SENT A RESPONSE");
+			System.out.println("THE SCHEDULER IS WAITING FOR AN ELEVATOR");
+			serverRequest = new DatagramPacket(new byte[1024], 1024);
 			server.receive(serverRequest);
+			System.out.println("THE SCHEDULER HAS BEEN NOTIFIED BY AN ELEVATOR");
+			System.out.println(new String(serverRequest.getData()));
 			server.send(serverReply);
+			System.out.println("THE SCHEDULUER HAS SCHEDULUED THE EVENT");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
