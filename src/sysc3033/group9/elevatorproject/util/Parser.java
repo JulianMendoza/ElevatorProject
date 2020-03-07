@@ -8,6 +8,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 import sysc3033.group9.elevatorproject.event.FloorEvent;
 
@@ -20,14 +22,14 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class Parser {
 	private static BufferedWriter output;
 
-	public static FloorEvent readTextFile(String fileName, File file) {
-		FloorEvent event = null;
+	public static FloorEvent[] readTextFile(String fileName, File file) {
+		List<FloorEvent> floorEvents = new ArrayList<FloorEvent>();
 		BufferedReader br = null;
 		try {
 			br = new BufferedReader(new FileReader(file));
 			String str;
-			while ((str = br.readLine()) != null) {
-				event = new FloorEvent(str);
+			while ((str = br.readLine()) != null && !str.isEmpty()) {
+				floorEvents.add(new FloorEvent(str));
 			}
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -44,7 +46,7 @@ public class Parser {
 				}
 			}
 		}
-		return event;
+		return (FloorEvent[]) floorEvents.toArray();
 	}
 
 	public static void deparse(String fileName, String event) {
