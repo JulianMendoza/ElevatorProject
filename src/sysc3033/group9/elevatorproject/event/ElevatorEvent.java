@@ -4,7 +4,6 @@ import sysc3033.group9.elevatorproject.constants.SleepTime;
 import sysc3033.group9.elevatorproject.constants.elevator.MotorStatus;
 import sysc3033.group9.elevatorproject.elevator.Elevator;
 import sysc3033.group9.elevatorproject.util.Sleeper;
-import sysc3033.group9.elevatorproject.util.TimedCondition;
 
 /**
  * 
@@ -15,26 +14,33 @@ public class ElevatorEvent implements Runnable {
 
 	private int targetFloor;
 	private Elevator elevator;
+	private FloorEvent floorEvent;
+
+	public ElevatorEvent(Elevator elevator, FloorEvent e) {
+		this.targetFloor = e.getFloor();
+		this.elevator = elevator;
+		this.floorEvent = e;
+	}
 
 	public ElevatorEvent(Elevator elevator, int targetFloor) {
-		this.targetFloor = targetFloor;
-		this.elevator = elevator;
+		Thread thread = new Thread(this);
+		thread.start();
 	}
 
 	@Override
 	public void run() {
 		doElevatorEvent();
 
-		TimedCondition idle = new TimedCondition(SleepTime.IDLE_TIME) {
-			@Override
-			public boolean condition() {
-				return !elevator.isBusy();
-			}
-		};
-
-		if (idle.isConditionSatisfied()) {
-			elevator.getMotor().setStatus(MotorStatus.IDLE);
-		}
+//		TimedCondition idle = new TimedCondition(SleepTime.IDLE_TIME) {
+//			@Override
+//			public boolean condition() {
+//				return !elevator.isBusy();
+//			}
+//		};
+//
+//		if (idle.isConditionSatisfied()) {
+//			elevator.getMotor().setStatus(MotorStatus.IDLE);
+//		}
 	}
 
 	private void doElevatorEvent() {
@@ -50,6 +56,10 @@ public class ElevatorEvent implements Runnable {
 
 		elevator.setLoaded(true);
 		elevator.setBusy(false);
+
+		if (floorEvent != null) {
+			new ElevatorEvent(elevator, floorEvent.getTargetFloor());
+		}
 	}
 
 	private void setMotorDirection() {

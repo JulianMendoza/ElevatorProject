@@ -55,13 +55,9 @@ public class ElevatorSystem {
 	}
 
 	/**
-	 * public ElevatorSystem(FloorSpan floorSpan, int numElevators) { elevators =
-	 * new HashMap<Integer, Elevator>(); for (int i = 0; i < numElevators; i++) {
-	 * elevators.put(i, new Elevator(floorSpan)); } eventQueue = new
-	 * FloorEventQueue(elevators); }
+	 * public ElevatorSystem(FloorSpan floorSpan, int numElevators) { elevators = new HashMap<Integer, Elevator>(); for (int i = 0; i < numElevators; i++) { elevators.put(i, new Elevator(floorSpan)); } eventQueue = new FloorEventQueue(elevators); }
 	 * 
-	 * public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
-	 * eventQueue.add(e, elevators.get(elevatorCarID)); }
+	 * public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) { eventQueue.add(e, elevators.get(elevatorCarID)); }
 	 */
 
 	private void handleFloorEvent(FloorEvent e, Elevator elevator) {
@@ -70,7 +66,7 @@ public class ElevatorSystem {
 	}
 
 	private ElevatorEvent createElevatorEvent(FloorEvent e, Elevator elevator) {
-		return new ElevatorEvent(elevator, e.getFloor());
+		return new ElevatorEvent(elevator, e);
 	}
 
 	private void dispatchElevatorEvent(ElevatorEvent e) {
