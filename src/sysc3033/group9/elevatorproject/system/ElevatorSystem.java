@@ -29,11 +29,13 @@ public class ElevatorSystem {
 	private InetAddress IP;
 
 	public ElevatorSystem(FloorSpan floorSpan) {
-		try {
-			socket = new DatagramSocket(5555);
-		} catch (SocketException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		int port = 5555;
+		while (socket == null) {
+			try {
+				socket = new DatagramSocket(port);
+			} catch (SocketException e) {
+				port++;
+			}
 		}
 		try {
 			IP = InetAddress.getLocalHost();
@@ -61,11 +63,7 @@ public class ElevatorSystem {
 	/**
 	 * 
 	 * 
-	 * @Override public void run() { while (true) { Map<Elevator, FloorEvent>
-	 *           priorityEvents = eventQueue.removePriorityEvents(); for (Elevator
-	 *           elevator : priorityEvents.keySet()) {
-	 *           handleFloorEvent(priorityEvents.get(elevator), elevator); }
-	 *           Sleeper.sleep(SleepTime.DEFAULT); } }
+	 * @Override public void run() { while (true) { Map<Elevator, FloorEvent> priorityEvents = eventQueue.removePriorityEvents(); for (Elevator elevator : priorityEvents.keySet()) { handleFloorEvent(priorityEvents.get(elevator), elevator); } Sleeper.sleep(SleepTime.DEFAULT); } }
 	 */
 
 	public synchronized void scheduleEvent(FloorEvent e, int elevatorCarID) {
