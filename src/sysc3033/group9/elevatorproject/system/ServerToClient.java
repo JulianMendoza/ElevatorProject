@@ -2,8 +2,8 @@ package sysc3033.group9.elevatorproject.system;
 
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 /**
@@ -17,7 +17,7 @@ import java.net.UnknownHostException;
  */
 public class ServerToClient implements Runnable {
 	private byte ack[], reply[], request[];
-	private DatagramSocket client, server;
+	private MulticastSocket client, server;
 	private DatagramPacket serverAck, serverReply, clientRequest, clientReply;
 	private InetAddress IP;
 
@@ -28,11 +28,11 @@ public class ServerToClient implements Runnable {
 	 * @param server DatagramSocket of the server
 	 * @throws UnknownHostException if the IP cannot be established
 	 */
-	public ServerToClient(DatagramSocket client, DatagramSocket server) throws UnknownHostException {
+	public ServerToClient(MulticastSocket client, MulticastSocket server) throws UnknownHostException {
 		this.client = client;
 		this.server = server;
 		String s = "Good bye from Scheduler";
-		IP = InetAddress.getLocalHost();
+		IP = InetAddress.getByName("225.6.7.8");
 		ack = new byte[1024];
 		serverAck = new DatagramPacket(ack, ack.length, IP, 5555);
 		reply = new byte[1024];

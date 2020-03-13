@@ -9,6 +9,7 @@ import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 import sysc3033.group9.elevatorproject.constants.FilePath;
@@ -45,12 +46,12 @@ public class ClientToServer implements Runnable {
 	 * @param server Datasocket of the server
 	 * @throws UnknownHostException if the IP cannot be received
 	 */
-	public ClientToServer(DatagramSocket client, DatagramSocket server) throws UnknownHostException {
+	public ClientToServer(MulticastSocket client, MulticastSocket server) throws UnknownHostException {
 		this.client = client;
 		this.server = server;
 		String s = "Hello from the scheduler";
 		String s2 = "Give me some info from scheduler";
-		IP = InetAddress.getLocalHost();
+		IP = InetAddress.getByName("225.6.7.8");
 		data = new byte[1024];
 		clientData = new DatagramPacket(data, data.length, IP, 3333);
 		clientReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 3333);

@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 import sysc3033.group9.elevatorproject.constants.Port;
@@ -27,7 +26,7 @@ public class ElevatorSystem {
 
 	// Map<Integer, Elevator> elevators;
 	FloorEventQueue eventQueue;
-	private DatagramSocket socket;
+	private MulticastSocket socket;
 	private DatagramPacket requestPacket, dataPacket, ackPacket;
 	private InetAddress IP;
 	private Elevator elevator;
@@ -38,18 +37,19 @@ public class ElevatorSystem {
 	private int port;
 
 	public ElevatorSystem(FloorSpan floorSpan) {
+		try {
+			IP = InetAddress.getByName("225.6.7.8");
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 		port = Port.ELEVATOR_SYSTEM;
 		while (socket == null) {
 			try {
-				socket = new DatagramSocket(port);
-			} catch (SocketException e) {
+				socket = new MulticastSocket(port);
+				socket.joinGroup(IP);
+			} catch (IOException e) {
 				port++;
 			}
-		}
-		try {
-			IP = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
 		}
 		elevator = new Elevator(floorSpan);
 		System.out.println("PORT NUMBER: " + port);
@@ -149,6 +149,7 @@ public class ElevatorSystem {
 	}
 
 	public static void main(String[] args) {
+		System.setProperty("java.net.preferIPv4Stack", "true");
 		ElevatorSystem system = new ElevatorSystem(new FloorSpan(1, 7));
 		system.process();
 	}
