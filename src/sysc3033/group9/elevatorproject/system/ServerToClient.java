@@ -34,10 +34,11 @@ public class ServerToClient implements Runnable {
 		String s = "Good bye from Scheduler";
 		IP = InetAddress.getByName("225.6.7.8");
 		ack = new byte[1024];
-		serverAck = new DatagramPacket(ack, ack.length, IP, 5555);
+		serverAck = new DatagramPacket(ack, ack.length);
 		reply = new byte[1024];
 		serverReply = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 5555);
 		request = new byte[1024];
+		System.out.println(IP);
 		clientRequest = new DatagramPacket(request, request.length, IP, 3333);
 		clientReply = new DatagramPacket(ack, ack.length, IP, 3333);
 	}

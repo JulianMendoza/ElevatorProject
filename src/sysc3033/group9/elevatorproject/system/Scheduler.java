@@ -24,6 +24,7 @@ public class Scheduler {
 		try {
 			client = new MulticastSocket(PORT_NUMBER);
 			server = new MulticastSocket(4445);
+			System.out.println(InetAddress.getByName("225.6.7.8"));
 			client.joinGroup(InetAddress.getByName("225.6.7.8"));
 			server.joinGroup(InetAddress.getByName("225.6.7.8"));
 		} catch (IOException e) {

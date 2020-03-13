@@ -129,6 +129,7 @@ public class ClientToServer implements Runnable {
 			System.out.println("THE SCHEDULER HAS BEEN NOTIFIED BY AN ELEVATOR");
 			System.out.println(new String(serverRequest.getData()));
 			createEvents();
+			Sleeper.sleep(1000);
 			server.send(serverReply);
 			System.out.println("THE SCHEDULER HAS SCHEDULED THE EVENT");
 		} catch (IOException e) {
