@@ -73,6 +73,8 @@ public class ClientToServer implements Runnable {
 	private void createEvents() {
 		events = Parser.readTextFile(FilePath.EVENT_FILE, file.getFile());
 		byte[] data = createEventObject(events[0]);
+		System.out.println("10 second delay to connect all elevators");
+		Sleeper.sleep(10000);
 		serverReply = new DatagramPacket(data, data.length, IP, 5555);
 		System.out.println(events[0]);
 		System.out.println(events[1]);

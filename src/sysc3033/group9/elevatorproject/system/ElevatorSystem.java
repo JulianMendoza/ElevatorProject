@@ -80,7 +80,7 @@ public class ElevatorSystem {
 	}
 
 	private void process() {
-		if (port != Port.ELEVATOR_SYSTEM) {
+		if (port == Port.ELEVATOR_SYSTEM) {
 			String s = "Request from the elevator";
 			String s2 = "Processed data is here";
 			requestPacket = new DatagramPacket(s.getBytes(), s.getBytes().length, IP, 4445);
