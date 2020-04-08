@@ -56,8 +56,7 @@ public class Parser {
 	}
 
 	public static void deparse(String fileName, String event) {
-		String cwd = new File("").getAbsolutePath();
-		cwd += fileName;
+		String cwd = fileName;
 		try {
 			output = new BufferedWriter(new FileWriter(cwd, true));
 			output.append(event);
