@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.SocketException;
 
 import sysc3033.group9.elevatorproject.constants.Port;
@@ -22,7 +22,7 @@ import sysc3033.group9.elevatorproject.event.FloorEvent;
 public class FloorSystem {
 
 	private EventFile eventFile;
-	private DatagramSocket socket;
+	private MulticastSocket socket;
 	private DatagramPacket sendPacket, receivePacket;
 	private ObjectOutputStream out;
 	private ByteArrayOutputStream bos;
@@ -31,8 +31,11 @@ public class FloorSystem {
 	public FloorSystem(EventFile eventFile) {
 		this.eventFile = eventFile;
 		try {
-			socket = new DatagramSocket(Port.FLOOR_SYSTEM);
+			socket = new MulticastSocket(Port.FLOOR_SYSTEM);
+			socket.joinGroup(InetAddress.getByName("225.6.7.8"));
 		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		this.bos = new ByteArrayOutputStream();
@@ -42,13 +45,14 @@ public class FloorSystem {
 	private void process() throws IOException {
 		String s2 = "Give me data";
 		System.out.println("SENDING A REQUEST TO THE SCHEDULER");
-		sendPacket = new DatagramPacket(eventFileObject, eventFileObject.length, InetAddress.getLocalHost(), 4444);
+		sendPacket = new DatagramPacket(eventFileObject, eventFileObject.length, InetAddress.getByName("225.6.7.8"),
+				4444);
 		socket.send(sendPacket);
 		receivePacket = new DatagramPacket(new byte[1024], 1024);
 		socket.receive(receivePacket);
 		System.out.println("RECEIVED A RESPONSE FROM THE SCHEDULER");
 		System.out.println(new String(receivePacket.getData()));
-		sendPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, InetAddress.getLocalHost(), 4444);
+		sendPacket = new DatagramPacket(s2.getBytes(), s2.getBytes().length, InetAddress.getByName("225.6.7.8"), 4444);
 		System.out.println("REQUESTING DATA FROM THE SCHEDULER"); // this will be display lamps and should continuously
 																	// loop
 		socket.send(sendPacket);
@@ -70,6 +74,7 @@ public class FloorSystem {
 	}
 
 	public static void main(String[] args) throws IOException {
+		System.setProperty("java.net.preferIPv4Stack", "true");
 		FloorEvent e = new FloorEvent();
 		for (int i = 0; i < 2; i++) {
 			e.createNewEvent();

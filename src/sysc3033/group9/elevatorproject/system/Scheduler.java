@@ -1,7 +1,8 @@
 package sysc3033.group9.elevatorproject.system;
 
-import java.net.DatagramSocket;
-import java.net.SocketException;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.net.UnknownHostException;
 
 /**
@@ -15,15 +16,18 @@ public class Scheduler {
 	private ElevatorSystem elevatorSystem;
 	private Schedule schedule;
 	private int PORT_NUMBER = 4444;
-	private DatagramSocket client, server;
+	private MulticastSocket client, server;
 	private Thread clientToServer, serverToClient;
 
 	public Scheduler(Schedule schedule) {
 		this.schedule = schedule;
 		try {
-			client = new DatagramSocket(PORT_NUMBER);
-			server = new DatagramSocket(4445);
-		} catch (SocketException e) {
+			client = new MulticastSocket(PORT_NUMBER);
+			server = new MulticastSocket(4445);
+			System.out.println(InetAddress.getByName("225.6.7.8"));
+			client.joinGroup(InetAddress.getByName("225.6.7.8"));
+			server.joinGroup(InetAddress.getByName("225.6.7.8"));
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -45,6 +49,7 @@ public class Scheduler {
 	}
 
 	public static void main(String[] args) throws UnknownHostException {
+		System.setProperty("java.net.preferIPv4Stack", "true");
 		Scheduler scheduler = new Scheduler(new Schedule());
 		scheduler.process();
 	}
